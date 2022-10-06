@@ -1,0 +1,14 @@
+
+
+.live-button-student {
+    animation: liveColorButton;
+}
+
+@keyframes liveColorButton {
+    0% {
+        background-color: aqua;
+    }
+    100% {
+        background-color: rebeccapurple;
+    }
+}
