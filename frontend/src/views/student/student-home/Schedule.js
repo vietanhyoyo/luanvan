@@ -8,36 +8,49 @@ import {
 } from '@mui/material';
 
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-
+import ScheduleService from 'services/objects/schedule.service';
 import ScheduleHover from './ScheduleHover';
 import { useTheme } from '@emotion/react';
 import { useSelector } from 'react-redux';
+import ScheduleLesson from './ScheduleLesson'
 
 function createData(number, monday, tuesday, wednesday, thursday, friday) {
     return { number, monday, tuesday, wednesday, thursday, friday };
 }
 
-const mix = (title, tooltip) => {
-    return <ScheduleHover title={title} tooltip={tooltip} />
-}
+const scheduleService = new ScheduleService()
 
 const rows = [
-    createData('1', mix('SHDC', 'Sáng 7:00 - 7:45'), 'LTVC', 'Tập làm văn', 'Thể dục', 'Khoa học'),
-    createData('2', 'Toán', 'Mĩ thuật', 'Toán', 'Thủ công', 'Mĩ thuật'),
-    createData('3', 'Tập đọc', 'Tập đọc', 'Tập đọc', 'Khoa học', 'Khoa học'),
-    createData('4', 'TN&XH', 'Toán', 'Toán', 'Toán', 'Địa lý'),
-    createData('5', 'Tiếng Anh', '', 'Thủ công', 'Âm nhạc', 'Lịch sử'),
+    createData('1', 'Thứ hai', 'Thứ ba', 'Thứ tư', 'Thứ năm', 'Thứ sáu'),
+    createData('2', 'Thứ hai', 'Thứ ba', 'Thứ tư', 'Thứ năm', 'Thứ sáu'),
+    createData('3', 'Thứ hai', 'Thứ ba', 'Thứ tư', 'Thứ năm', 'Thứ sáu'),
+    createData('4', 'Thứ hai', 'Thứ ba', 'Thứ tư', 'Thứ năm', 'Thứ sáu'),
+    createData('5', 'Thứ hai', 'Thứ ba', 'Thứ tư', 'Thứ năm', 'Thứ sáu'),
     createData('', '', '', '', '', ''),
-    createData('1', 'PĐ Toán', 'PĐ. Tiếng việt', 'Tập đọc', 'Chính tả', 'LTVC'),
-    createData('2', 'Toán', 'Toán', '', 'Tiếng Việt', 'HDNGLL'),
-    createData('3', '', '', '', 'Thể dục'),
-    createData('4', '', '', '', '', 'Thủ công'),
-    createData('5', '', '', '', '', 'Mĩ thuật'),
+    createData('6', 'Thứ hai', 'Thứ ba', 'Thứ tư', 'Thứ năm', 'Thứ sáu'),
+    createData('7', 'Thứ hai', 'Thứ ba', 'Thứ tư', 'Thứ năm', 'Thứ sáu'),
+    createData('8', 'Thứ hai', 'Thứ ba', 'Thứ tư', 'Thứ năm', 'Thứ sáu'),
+    createData('9', 'Thứ hai', 'Thứ ba', 'Thứ tư', 'Thứ năm', 'Thứ sáu'),
 ];
 
 const Schedule = () => {
     const theme = useTheme();
     const customization = useSelector((state) => state.customization);
+    const [schedule, setSchedule] = React.useState({
+        _id: ""
+    })
+    const [classID, setClassID] = React.useState("")
+
+    React.useEffect(async () => {
+        try {
+            const result = await scheduleService.getScheduleOfUser()
+            console.log(result)
+            setSchedule(result.data.schedule)
+            setClassID(result.data.classID)
+        } catch (error) {
+            console.log(error)
+        }
+    }, [])
 
     return (<>
         <Box sx={{
@@ -75,11 +88,46 @@ const Schedule = () => {
                                         sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
                                     >
                                         <TableCell align="center">{row.number}</TableCell>
-                                        <TableCell align="center">{row.monday}</TableCell>
-                                        <TableCell align="center">{row.tuesday}</TableCell>
-                                        <TableCell align="center">{row.wednesday}</TableCell>
-                                        <TableCell align="center">{row.thursday}</TableCell>
-                                        <TableCell align="center">{row.friday}</TableCell>
+                                        <TableCell align="center">
+                                            <ScheduleLesson
+                                                scheduleID={schedule._id}
+                                                classID={classID}
+                                                weekday={row.monday}
+                                                lessonNumber={row.number}
+                                            />
+                                        </TableCell>
+                                        <TableCell align="center">
+                                            <ScheduleLesson
+                                                scheduleID={schedule._id}
+                                                classID={classID}
+                                                weekday={row.tuesday}
+                                                lessonNumber={row.number}
+                                            />
+                                        </TableCell>
+                                        <TableCell align="center">
+                                            <ScheduleLesson
+                                                scheduleID={schedule._id}
+                                                classID={classID}
+                                                weekday={row.wednesday}
+                                                lessonNumber={row.number}
+                                            />
+                                        </TableCell>
+                                        <TableCell align="center">
+                                            <ScheduleLesson
+                                                scheduleID={schedule._id}
+                                                classID={classID}
+                                                weekday={row.thursday}
+                                                lessonNumber={row.number}
+                                            />
+                                        </TableCell>
+                                        <TableCell align="center">
+                                            <ScheduleLesson
+                                                scheduleID={schedule._id}
+                                                classID={classID}
+                                                weekday={row.friday}
+                                                lessonNumber={row.number}
+                                            />
+                                        </TableCell>
                                     </TableRow>
                                 ))}
                             </TableBody>

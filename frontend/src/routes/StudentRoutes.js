@@ -10,6 +10,7 @@ const StudentHome = Loadable(lazy(() => import('views/student/StudentHome')));
 const StudentProfile = Loadable(lazy(() => import('views/student/StudentProfile')));
 const StudentLesson = Loadable(lazy(() => import('views/student/StudentLesson')));
 const StudentClass = Loadable(lazy(() => import('views/student/StudentClass')));
+const StudentCalendar = Loadable(lazy(() => import('views/student/StudentCalendar')));
 
 // ==============================|| MAIN ROUTING ||============================== //
 
@@ -32,6 +33,10 @@ const StudentRoutes = {
         {
             path: '/student/class',
             element: <StudentClass />
+        },
+        {
+            path: '/student/calendar',
+            element: <StudentCalendar />
         }
     ]
 };

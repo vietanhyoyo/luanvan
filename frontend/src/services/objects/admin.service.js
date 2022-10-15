@@ -22,6 +22,16 @@ class AdminService extends BaseService {
         return result;
     }
 
+    getAccountById = async (id) => {
+        const result = await this.api.get('/admin/get-account-by-id/' + id);
+        return result;
+    }
+
+    getUserInfo = async () => {
+        const result = await this.api.get('/admin/get-user-info');
+        return result;
+    }
+
 }
 
 export default AdminService;

@@ -19,6 +19,7 @@ const AddNews = () => {
     const handleSubmit = async () => {
         try {
             const result = await newsService.addNews(text)
+            handleClose()
             console.log(result);
         } catch (error) {
             console.log(error)

@@ -1,12 +1,30 @@
 import { Box, Typography, Avatar, Divider, Button } from "@mui/material"
 import { styled, useTheme } from "@mui/system";
+import { useEffect } from "react";
+import AccountService from "services/objects/account.service";
 
 const Input = styled('input')({
     display: 'none',
 });
 
-const ProfileAvatar = () => {
+const accountService = new AccountService()
+
+const ProfileAvatar = ({ fullname, title }) => {
     const theme = useTheme();
+
+    const getAccountInfor = async () => {
+        try {
+            const result = await accountService.getUserInfo();
+            // console.log(result)
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
+    useEffect(() => {
+        getAccountInfor();
+    }, [])
+
     return (
         <Box
             sx={{
@@ -19,14 +37,14 @@ const ProfileAvatar = () => {
                 sx={{ width: 70, height: 70, margin: "auto" }}
             />
             <Typography variant="h2" sx={{ margin: 2 }} >
-                Bùi Việt Anh
+                {fullname ?? "Không tên"}
             </Typography>
             <Typography variant="body1" sx={{ margin: 2 }} >
-                Lớp 3A
+                {title ?? "---"}
             </Typography>
             <Divider />
             <label htmlFor="contained-button-file">
-                <Input accept="image/*" id="contained-button-file" multiple type="file" />
+                <Input accept="image/*" id="contained-button-file" type="file" />
                 <Button component="span">
                     Tải ảnh lên
                 </Button>

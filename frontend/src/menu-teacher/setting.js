@@ -10,8 +10,8 @@ const icons = {
 
 // ==============================|| UTILITIES MENU ITEMS ||============================== //
 
-const accounts = {
-    id: 'accounts',
+const setting = {
+    id: 'setting',
     title: 'Thiết lập',
     type: 'group',
     children: [
@@ -26,4 +26,4 @@ const accounts = {
     ]
 };
 
-export default accounts;
+export default setting;
