@@ -3,6 +3,7 @@ const Schema = mongoose.Schema;
 
 const Account = new Schema({
     username: { type: String, maxLength: 255, required: true, unique: true },
+    avatar: { type: String, maxlength: 255 },
     password: { type: String, maxLength: 255, required: true },
     name: { type: String, maxLength: 255, required: true },
     birthday: { type: Date },

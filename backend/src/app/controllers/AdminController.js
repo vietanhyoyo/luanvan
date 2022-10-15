@@ -1,5 +1,6 @@
 const Account = require('../models/Account')
 const bcrypt = require('bcrypt-nodejs');
+const jwt = require("jsonwebtoken")
 
 class AdminController {
 
@@ -65,6 +66,41 @@ class AdminController {
                         res.send({ status: 'Success', message: 'Cập nhật thành công!', data: docs });
                     }
                 });
+        }
+    }
+
+    getAccountById(req, res) {
+        if (!req.params.id) res.sendStatus(400)
+        else {
+            const { id } = req.params
+            Account.findOne({ _id: id }).exec((err, doc) => {
+                if (err) res.send(err)
+                else {
+                    res.send(doc)
+                }
+            })
+        }
+    }
+
+    getUserInfo(req, res) {
+        const authorization = req.headers['authorization'];
+        if (!authorization) res.sendStatus(401);
+        //'Beaer [token]'
+        const token = authorization.split(' ')[1];
+
+        if (!token) res.sendStatus(401);
+        else {
+            jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, data) => {
+                // console.log(err, data)
+                if (err) res.sendStatus(403);
+                else {
+                    Account.findOne({ _id: data._id })
+                        .exec((error, doc) => {
+                            if (error) res.send(error);
+                            else res.send(doc);
+                        })
+                };
+            });
         }
     }
 

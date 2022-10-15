@@ -3,6 +3,8 @@ const Schedule = require('../models/Schedule');
 const ScheduleLesson = require('../models/ScheduleLesson')
 const SchoolYear = require('../models/SchoolYear');
 const Class = require('../models/Class')
+const Student = require('../models/Student')
+const jwt = require("jsonwebtoken")
 
 class ScheduleController {
 
@@ -50,7 +52,7 @@ class ScheduleController {
                 res.send(result);
 
             } catch (error) {
-                res.send(error)
+                res.send({message: "Error",error})
             }
         }
     }
@@ -132,13 +134,58 @@ class ScheduleController {
                 const result = await ScheduleLesson.updateOne(
                     { _id: req.body.id },
                     { teacher: req.body.teacherID, subject: req.body.subjectID })
-                    
+
                 res.send(result);
             } catch (error) {
                 res.send(error);
             }
 
         }
+    }
+
+    async getScheduleLessonByLessonNumber(req, res) {
+        if (!req.body) res.sendStatus(400);
+        else {
+            try {
+                const data = req.body;
+
+                const result = await ScheduleLesson
+                    .findOne({ schedule: data.id, class: data.class, weekday: data.weekday, lessonNumber: data.lessonNumber })
+                    .populate({ path: 'subject', model: 'Subject' });
+
+                res.send(result);
+
+            } catch (error) {
+                res.send({message: "Error",error})
+            }
+        }
+    }
+
+    async getScheduleOfUser(req, res) {
+        try {
+            const authorization = req.headers['authorization'];
+            if (!authorization) res.sendStatus(401);
+            //'Beaer [token]'
+            const token = authorization.split(' ')[1];
+
+            if (!token) res.sendStatus(401);
+
+            else {
+                const user = await jwt.verify(token, process.env.ACCESS_TOKEN_SECRET)
+
+                if (user.role === 2) {
+                    const student = await Student.findOne({ account: user._id })
+                    const schedule = await Schedule.findOne({}, {}, { sort: { 'endDate': -1 } })
+                    res.send({ classID: student.class, schedule })
+                }
+                else if (user.role === 1) {
+                    res.send(user)
+                }
+            }
+        } catch (error) {
+            res.send(error)
+        }
+
     }
 
 }

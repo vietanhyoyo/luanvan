@@ -119,6 +119,7 @@ class StudentController {
                     console.log('student: ', )
                     Student.findOne({ account: data._id })
                         .populate({ path: 'class', model: 'Class' })
+                        .populate({ path: 'account', model: 'Account' })
                         .exec((error, doc) => {
                             if (error) res.send(error);
                             else res.send(doc);
