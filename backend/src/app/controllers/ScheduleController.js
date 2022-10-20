@@ -4,6 +4,7 @@ const ScheduleLesson = require('../models/ScheduleLesson')
 const SchoolYear = require('../models/SchoolYear');
 const Class = require('../models/Class')
 const Student = require('../models/Student')
+const Teacher = require('../models/Teacher')
 const jwt = require("jsonwebtoken")
 
 class ScheduleController {
@@ -151,7 +152,8 @@ class ScheduleController {
 
                 const result = await ScheduleLesson
                     .findOne({ schedule: data.id, class: data.class, weekday: data.weekday, lessonNumber: data.lessonNumber })
-                    .populate({ path: 'subject', model: 'Subject' });
+                    .populate({ path: 'subject', model: 'Subject' })
+                    .populate({ path: 'teacher', model: 'Teacher' })
 
                 res.send(result);
 
@@ -179,7 +181,12 @@ class ScheduleController {
                     res.send({ classID: student.class, schedule })
                 }
                 else if (user.role === 1) {
-                    res.send(user)
+                    const teacher = await Teacher.findOne({ account: user._id })
+                    if(teacher.homeroomTeacher){
+                        const schedule = await Schedule.findOne({}, {}, { sort: { 'endDate': -1 } })
+                        res.send({ classID: teacher.homeroomClass, schedule, teacherID: teacher._id })
+                    }
+                    else res.send(user)
                 }
             }
         } catch (error) {

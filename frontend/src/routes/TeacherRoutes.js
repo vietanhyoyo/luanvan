@@ -7,7 +7,6 @@ import Loadable from 'ui-component/Loadable';
 
 
 // sample page routing
-const SamplePage = Loadable(lazy(() => import('views/sample-page')))
 const TeacherWeekLesson = Loadable(lazy(() => import('views/teacher/TeacherWeekLesson')))
 const ClassCalendar = Loadable(lazy(() => import('views/teacher/ClassCalendar')))
 const TeacherRoute = Loadable(lazy(() => import('views/teacher/TeacherRoute')))

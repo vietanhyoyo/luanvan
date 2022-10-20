@@ -9,7 +9,6 @@ import {
 
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import ScheduleService from 'services/objects/schedule.service';
-import ScheduleHover from './ScheduleHover';
 import { useTheme } from '@emotion/react';
 import { useSelector } from 'react-redux';
 import ScheduleLesson from './ScheduleLesson'
@@ -33,20 +32,21 @@ const rows = [
     createData('16:30-17:05', '9', 'Thứ hai', 'Thứ ba', 'Thứ tư', 'Thứ năm', 'Thứ sáu'),
 ];
 
-const Schedule = () => {
+const ClassSchedule = () => {
     const theme = useTheme();
     const customization = useSelector((state) => state.customization);
     const [schedule, setSchedule] = React.useState({
         _id: ""
     })
     const [classID, setClassID] = React.useState("")
+    const [teacherID, setTeacherID] = React.useState("")
 
     React.useEffect(async () => {
         try {
             const result = await scheduleService.getScheduleOfUser()
-            console.log(result)
             setSchedule(result.data.schedule)
             setClassID(result.data.classID)
+            setTeacherID(result.data.teacherID)
         } catch (error) {
             console.log(error)
         }
@@ -96,6 +96,7 @@ const Schedule = () => {
                                                 classID={classID}
                                                 weekday={row.monday}
                                                 lessonNumber={row.number}
+                                                teacherID={teacherID}
                                             />
                                         </TableCell>
                                         <TableCell align="center">
@@ -104,6 +105,7 @@ const Schedule = () => {
                                                 classID={classID}
                                                 weekday={row.tuesday}
                                                 lessonNumber={row.number}
+                                                teacherID={teacherID}
                                             />
                                         </TableCell>
                                         <TableCell align="center">
@@ -112,6 +114,7 @@ const Schedule = () => {
                                                 classID={classID}
                                                 weekday={row.wednesday}
                                                 lessonNumber={row.number}
+                                                teacherID={teacherID}
                                             />
                                         </TableCell>
                                         <TableCell align="center">
@@ -120,6 +123,7 @@ const Schedule = () => {
                                                 classID={classID}
                                                 weekday={row.thursday}
                                                 lessonNumber={row.number}
+                                                teacherID={teacherID}
                                             />
                                         </TableCell>
                                         <TableCell align="center">
@@ -128,6 +132,7 @@ const Schedule = () => {
                                                 classID={classID}
                                                 weekday={row.friday}
                                                 lessonNumber={row.number}
+                                                teacherID={teacherID}
                                             />
                                         </TableCell>
                                     </TableRow>
@@ -142,4 +147,4 @@ const Schedule = () => {
     )
 }
 
-export default Schedule;
+export default ClassSchedule;

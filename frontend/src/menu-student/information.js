@@ -19,7 +19,7 @@ const information = {
             id: 'news',
             title: 'Bản tin',
             type: 'item',
-            url: '/student/news',
+            url: '/student/home',
             icon: icons.IconWorld,
             breadcrumbs: false
         }

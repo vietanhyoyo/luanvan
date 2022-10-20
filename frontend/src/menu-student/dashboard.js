@@ -9,10 +9,10 @@ const dashboard = {
     type: 'group',
     children: [
         {
-            id: 'default',
+            id: 'calendar',
             title: 'Thời khóa biểu',
             type: 'item',
-            url: '/teacher/classCalendar',
+            url: '/student/calendar',
             icon: icons.IconCalendarTime,
             breadcrumbs: false
         },
