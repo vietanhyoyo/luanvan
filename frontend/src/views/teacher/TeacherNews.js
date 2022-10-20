@@ -14,8 +14,6 @@ import AddNews from "./teacher-news/AddNews";
 import News from "./teacher-news/News";
 import NewsService from "services/objects/news.service";
 import AdminService from "services/objects/admin.service";
-import { verify } from 'jsonwebtoken'
-import { ApiPath, StorageKeys } from "store/constant";
 
 const newsService = new NewsService()
 const adminService = new AdminService()
@@ -66,6 +64,7 @@ const TeacherNews = () => {
                                     newsData={row}
                                     key={index}
                                     userID={user._id}
+                                    userInfor={user}
                                 />
                             })
                         }

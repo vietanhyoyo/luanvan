@@ -104,6 +104,42 @@ class AdminController {
         }
     }
 
+    async changePassword(req, res) {
+        if (!req.body) res.sendStatus(400);
+        else {
+            try {
+                const authorization = req.headers['authorization'];
+                if (!authorization) res.sendStatus(401);
+                //'Beaer [token]'
+                const token = authorization.split(' ')[1];
+
+                if (!token) res.sendStatus(401);
+                else {
+                    const {oldPass, newPass} = req.body;
+                    const user = await jwt.verify(token, process.env.ACCESS_TOKEN_SECRET);
+                    let account = await Account.findById(user._id);
+                    account = account._doc;
+
+                    const bool = bcrypt.compareSync(oldPass, account.password);
+                    if(bool){
+                        const newPassword = await bcrypt.hashSync(newPass, bcrypt.genSaltSync(5), null);
+                        const updateAccount = {
+                            ...account,
+                            password: newPassword
+                        }
+                        console.log(updateAccount)
+                        await Account.updateOne({_id: user._id}, updateAccount)
+                        res.send({ status: 200, message: 'Đã đổi mật khẩu thành công' });
+                    }else{
+                        res.send({ status: 500, message: 'Mật khẩu cũ không đúng' });
+                    }
+                }
+            } catch (error) {
+                res.send(error)
+            }
+        }
+    }
+
 }
 
 module.exports = new AdminController;

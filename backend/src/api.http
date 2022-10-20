@@ -64,3 +64,5 @@ POST http://localhost:5000/create-week-semester-two
 Content-Type: application/json
 
 {}
+###
+GET http://localhost:5000/management/add

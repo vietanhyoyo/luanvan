@@ -7,12 +7,12 @@ import { styled, useTheme } from '@mui/material/styles';
 import ProfileAvatar from 'ui-component/ProfileAvatar';
 import { useState, useEffect, forwardRef } from 'react'
 import { gridSpacing } from 'store/constant';
-import StudentService from 'services/objects/student.service';
+import TeacherService from 'services/objects/teacher.service';
 import moment from 'moment';
 import MuiAlert from '@mui/material/Alert';
 import ResetPassword from 'ui-component/ResetPassword';
 
-const studentService = new StudentService()
+const teacherService = new TeacherService()
 
 function formatInputDate(dateString) {
     let date = new Date(Date.now());
@@ -25,8 +25,8 @@ const Alert = forwardRef(function Alert(props, ref) {
     return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
 });
 
-const StudentProfile = () => {
 
+const TeacherProfile = () => {
     const [notification, setNotification] = useState({
         open: false,
         message: 'Đã thêm 1 năm học mới!',
@@ -38,25 +38,25 @@ const StudentProfile = () => {
             _id: '',
             username: ''
         },
-        class: {
-            name: ''
-        },
+        sex: '',
+        classInCharge: [],
         ethnic: '',
         idStudent: '',
-        phoneNumber: '',
+        phone: '',
         email: '',
-        parent: '',
         birthday: null,
         homeTown: '',
-        address: ''
+        residence: '',
+        position: '',
+        socialInsurance: '',
+        identityCard: ''
     })
 
 
     const getAPI = async () => {
         try {
-            const result = await studentService.getStudentInformation();
+            const result = await teacherService.getInformation();
             setUser(result.data);
-            console.log(result);
         } catch (error) {
             console.log(error);
         }
@@ -69,12 +69,11 @@ const StudentProfile = () => {
     const updateInformation = async () => {
         const data = {
             ...user,
-            account: user.account._id,
-            class: user.class._id
+            account: user.account._id
         }
 
         try {
-            const result = await studentService.update(user.account, data)
+            const result = await teacherService.update(user.account, data)
             getAPI();
             setNotification({
                 open: true,
@@ -115,7 +114,10 @@ const StudentProfile = () => {
                     <Grid container spacing={gridSpacing}>
                         <Grid item sm={12} xs={12} md={12} lg={12}>
                             <MainCard>
-                                <ProfileAvatar fullname={user.name} title={user.class.name} />
+                                <ProfileAvatar
+                                    fullname={user.name}
+                                    title={user.homeroomTeacher ? "Chủ nhiệm " + user.homeroomClass.name : "Giáo viên bộ môn"}
+                                />
                             </MainCard>
                         </Grid>
                     </Grid>
@@ -137,6 +139,14 @@ const StudentProfile = () => {
                                             <TextField
                                                 sx={{ margin: 1, width: "100%" }}
                                                 required
+                                                label="Giới tính"
+                                                variant="outlined"
+                                                value={user.sex}
+                                                disabled={true}
+                                            />
+                                            <TextField
+                                                sx={{ margin: 1, width: "100%" }}
+                                                required
                                                 label="Dân tộc"
                                                 variant="outlined"
                                                 value={user.ethnic}
@@ -148,18 +158,18 @@ const StudentProfile = () => {
                                                 required
                                                 label="Số điện thoại"
                                                 variant="outlined"
-                                                name='phoneNumber'
+                                                name='phone'
                                                 onChange={handleChange}
-                                                value={user.phoneNumber}
+                                                value={user.phone}
                                             />
                                             <TextField
                                                 sx={{ margin: 1, width: "100%" }}
                                                 required
-                                                label="Tên phụ huynh"
+                                                label="CMDN/CCCD"
                                                 variant="outlined"
-                                                name='parent'
+                                                name='identityCard'
                                                 onChange={handleChange}
-                                                value={user.parent}
+                                                value={user.identityCard}
                                             />
                                         </Box>
                                     </Grid>
@@ -171,14 +181,6 @@ const StudentProfile = () => {
                                                 label="Tên tài khoản"
                                                 variant="outlined"
                                                 value={user.account.username}
-                                                disabled={true}
-                                            />
-                                            <TextField
-                                                sx={{ margin: 1, width: "100%" }}
-                                                required
-                                                label="Mã học sinh"
-                                                variant="outlined"
-                                                value={user.idStudent}
                                                 disabled={true}
                                             />
                                             <TextField
@@ -200,6 +202,22 @@ const StudentProfile = () => {
                                                 name='birthday'
                                                 onChange={handleChange}
                                             />
+                                            <TextField
+                                                sx={{ margin: 1, width: "100%" }}
+                                                required
+                                                label="Số bảo hiểm y tế"
+                                                variant="outlined"
+                                                value={user.socialInsurance}
+                                                disabled={true}
+                                            />
+                                            <TextField
+                                                sx={{ margin: 1, width: "100%" }}
+                                                required
+                                                label="Chức vụ"
+                                                variant="outlined"
+                                                value={user.position}
+                                                disabled={true}
+                                            />
                                         </Box>
                                     </Grid>
                                 </Grid>
@@ -220,8 +238,8 @@ const StudentProfile = () => {
                                                 required
                                                 label="Nơi cư trú"
                                                 variant="outlined"
-                                                value={user.address}
-                                                name='address'
+                                                value={user.residence}
+                                                name='residence'
                                                 onChange={handleChange}
                                             />
                                         </Box>
@@ -246,7 +264,7 @@ const StudentProfile = () => {
                             </MainCard>
                         </Grid>
                         <Grid item xs={12}>
-                            <ResetPassword userID={user.account._id}/>
+                            <ResetPassword userID={user.account._id} />
                         </Grid>
                     </Grid>
                 </Grid>
@@ -259,6 +277,6 @@ const StudentProfile = () => {
             </Alert>
         </Snackbar>
     </>
-};
+}
 
-export default StudentProfile;
+export default TeacherProfile

@@ -32,7 +32,10 @@ class NewsController {
     }
 
     getAll(req, res) {
-        News.find({}).populate({ path: 'createUser', model: 'Account' }).exec((err, docs) => {
+        News.find({})
+        .populate({ path: 'createUser', model: 'Account' })
+        .sort({ createdAt: -1 })
+        .exec((err, docs) => {
             if (err) res.send(err);
             else {
                 res.send(docs);
@@ -192,6 +195,49 @@ class NewsController {
 
                     await Comment.updateOne({ _id: commentID }, { usersLike })
                     res.send(comment)
+
+                }
+            } catch (error) {
+                res.send(error)
+            }
+        }
+    }
+
+    async likeReComment(req, res) {
+        if (!req.body) res.sendStatus(400);
+        else {
+            try {
+                const authorization = req.headers['authorization'];
+                if (!authorization) res.sendStatus(401);
+                //'Beaer [token]'
+                const token = authorization.split(' ')[1];
+
+                if (!token) res.sendStatus(401);
+
+                else {
+                    const { reCommentID } = req.body;
+                    const user = await jwt.verify(token, process.env.ACCESS_TOKEN_SECRET)
+
+                    let recomment = await ReComment.findById(reCommentID).populate({ path: 'createUser', model: 'Account' })
+                    const usersLike = recomment.usersLike;
+                    const find = usersLike.indexOf(user._id)
+
+                    if (find === -1) {
+                        usersLike.push(user._id)
+                    }
+                    else {
+                        usersLike.splice(find, 1)
+                    }
+
+                    console.log(recomment)
+
+                    recomment = {
+                        ...recomment,
+                        usersLike
+                    }
+
+                    await ReComment.updateOne({ _id: reCommentID }, { usersLike })
+                    res.send(recomment)
 
                 }
             } catch (error) {

@@ -156,6 +156,7 @@ class TeacherController {
                 else {
                     Teacher.findOne({ account: data._id })
                         .populate({ path: "homeroomClass", model: "Class" })
+                        .populate({ path: "account", model: "Account" })
                         .exec((error, doc) => {
                             if (error) res.send(error);
                             else res.send(doc);

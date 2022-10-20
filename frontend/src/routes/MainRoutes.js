@@ -29,6 +29,7 @@ const AddStudent = Loadable(lazy(() => import('views/admin/AddStudent')))
 const UpdateStudent = Loadable(lazy(() => import('views/admin/UpdateStudent')))
 const EditSchedule = Loadable(lazy(() => import('views/admin/EditSchedule')))
 const ScheduleList = Loadable(lazy(() => import('views/admin/ScheduleList')))
+const ManageUpdate = Loadable(lazy(() => import('views/admin/ManageUpdate')))
 // ==============================|| MAIN ROUTING ||============================== //
 
 const MainRoutes = {
@@ -118,7 +119,11 @@ const MainRoutes = {
         {
             path: '/manager/schedule',
             element: <ScheduleList />
-        }
+        },
+        {
+            path: '/manager/manage-update',
+            element: <ManageUpdate />
+        },
     ]
 };
 

@@ -14,7 +14,7 @@ import Comment from "./Comment";
 
 const adminService = new AdminService()
 const newsService = new NewsService()
-
+const baseUrl = process.env.REACT_APP_BASE_URL
 const borderColor = '#F4F6F8'
 
 function formatInputDate(dateString) {
@@ -31,10 +31,11 @@ const News = (props) => {
         usersLike: []
     })
     const [account, setAccount] = useState({
-        name: 'No name'
+        name: 'No name',
+        avatar: ''
     })
     const [comment, setComment] = useState({
-        text: null,
+        text: '',
         news: null
     })
     const [commentList, setCommentList] = useState([])
@@ -71,10 +72,15 @@ const News = (props) => {
         }
     }
 
-    const addComment = async () => {
+    const addComment = async (e) => {
+        console.log('Go')
+        e.preventDefault();
         try {
             const result = await newsService.addComment(comment.text, comment.news);
-            console.log(result)
+            setComment(prev => ({
+                ...prev, text: ''
+            }));
+            getComment();
         } catch (error) {
             console.log(error)
         }
@@ -105,7 +111,13 @@ const News = (props) => {
     return <>
         <MainCard sx={{ marginBottom: 3 }}>
             <Box display="flex">
-                <Avatar>{account.name && account.name.charAt(0)}</Avatar>
+                {account.avatar ? <Avatar
+                    alt="profile"
+                    src={baseUrl + "/image/" + account.avatar}
+                /> : <Avatar
+                    alt="profile"
+                    label='T'
+                />}
                 <Box sx={{ marginLeft: '10px' }}>
                     <Typography variant={'subtitle1'}>{account.name || "Loading"}</Typography>
                     <Typography variant={'subtitle2'}>{
@@ -126,40 +138,50 @@ const News = (props) => {
                 </Box>
             </Box>
             <Box>
-                {
-                    commentList.length !== 0 ?
-                        commentList.map((row, index) => {
-                            return <Comment
-                                key={index}
-                                comment={row}
-                                userID={props.userID}
-                            />
-                        })
-                        : <div></div>
-                }
+                {commentList.length !== 0 ?
+                    commentList.map((row, index) => {
+                        return <Comment
+                            key={index}
+                            comment={row}
+                            userID={props.userID}
+                            userInfor={props.userInfor}
+                        />
+                    })
+                    : <div></div>}
             </Box>
             <Box>
-                <Box display="flex" marginTop={1}>
-                    <Avatar sx={{ width: 28, height: 28 }}>{account.name && account.name.charAt(0)}</Avatar>
-                    <Input sx={{
-                        position: 'relative',
-                        marginLeft: '10px',
-                        padding: '10px',
-                        borderRadius: '10px',
-                        border: `1px solid ${borderColor}`,
-                        flex: 1
-                    }}
-
-                        onChange={(e) => {
-                            setComment(prev => ({ ...prev, text: e.target.value }))
+                <form onSubmit={addComment}>
+                    <Box display="flex" marginTop={1}>
+                        {props.userInfor.avatar ? <Avatar
+                            alt="profile"
+                            src={baseUrl + "/image/" + props.userInfor.avatar}
+                            sx={{ width: 28, height: 28 }}
+                        /> : <Avatar
+                            alt="profile"
+                            label='T'
+                            sx={{ width: 28, height: 28 }}
+                        />}
+                        <Input sx={{
+                            position: 'relative',
+                            marginLeft: '10px',
+                            padding: '10px',
+                            borderRadius: '10px',
+                            border: `1px solid ${borderColor}`,
+                            flex: 1
                         }}
-                        variant="outlined"
-                        fullWidth
-                    />
-                    <IconButton color="primary" onClick={addComment}>
-                        <SendIcon />
-                    </IconButton>
-                </Box>
+                            name="commentInput"
+                            value={comment.text}
+                            onChange={(e) => {
+                                setComment(prev => ({ ...prev, text: e.target.value }))
+                            }}
+                            variant="outlined"
+                            fullWidth
+                        />
+                        <IconButton color="primary" type="submit">
+                            <SendIcon />
+                        </IconButton>
+                    </Box>
+                </form>
             </Box>
         </MainCard>
     </>

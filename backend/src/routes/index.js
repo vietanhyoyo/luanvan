@@ -12,9 +12,12 @@ const classContentRouter = require("./classContent")
 const linkRouter = require("./link")
 const videoRouter = require("./video")
 const newsRouter = require("./news")
+const imageRouter = require("./image")
+const managementRouter = require("./management")
 
 function route(app) {
 
+    app.use('/management', managementRouter);
     app.use('/news', newsRouter);
     app.use('/video', videoRouter);
     app.use('/link', linkRouter);
@@ -27,6 +30,7 @@ function route(app) {
     app.use('/teacher', teacherRouter);
     app.use('/student', studentRouter);
     app.use('/subject', subjectRouter);
+    app.use('/image', imageRouter);
     app.use('/grade', gradeRouter);
     app.use('/', siteRouter);
 

@@ -69,7 +69,7 @@ const Schedule = () => {
                     <Typography>Thời khóa biểu</Typography>
                 </AccordionSummary>
                 <AccordionDetails sx={{ padding: '0px' }}>
-                    <TableContainer>
+                    <TableContainer size='small'>
                         <Table sx={{ minWidth: 450 }} aria-label="simple table" size='small'>
                             <TableHead>
                                 <TableRow>

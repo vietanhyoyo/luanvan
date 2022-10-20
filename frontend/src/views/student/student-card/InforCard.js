@@ -7,6 +7,7 @@ const { default: MainCard } = require("ui-component/cards/MainCard")
 
 const teacherService = new TeacherService();
 const studentService = new StudentService();
+const baseUrl = process.env.REACT_APP_BASE_URL;
 
 function formatDateVN(dateString) {
     const date = new Date(dateString);
@@ -16,13 +17,16 @@ function formatDateVN(dateString) {
 
 const InforCard = () => {
 
-    const [student, setStudent] = useState({});
+    const [student, setStudent] = useState({
+        account: {
+            avatar: ''
+        }
+    });
     const [loading, setLoading] = useState(true)
 
     const getTeacherInformation = async () => {
         try {
             const result = await studentService.getStudentInformation()
-            console.log(result.data)
             setStudent(result.data);
             setLoading(false);
         } catch (error) {
@@ -34,16 +38,18 @@ const InforCard = () => {
         getTeacherInformation();
     }, [])
 
-    console.log(student)
-
     return loading ? (
         <TotalIncomeCard />
     ) : (<MainCard>
-        <Avatar
+        {student.account.avatar ? <Avatar
             alt="profile"
-            src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT9d0FxkqjeagODizu4EZbMXw_-OFAF2Go0J0RJjGgYMHIB_ilFiIc8YipxLobRhQlQYiI&usqp=CAU"
+            src={baseUrl + "/image/" + student.account.avatar}
             sx={{ width: 80, height: 80, margin: "auto" }}
-        />
+        /> : <Avatar
+            alt="profile"
+            label='T'
+            sx={{ width: 80, height: 80, margin: "auto" }}
+        />}
         <Typography variant="h2" mt={2} sx={{ width: "100%", textAlign: "center" }} >
             {student.name}
         </Typography>

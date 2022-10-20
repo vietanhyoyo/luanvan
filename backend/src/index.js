@@ -32,9 +32,8 @@ const router = express.Router();
 const url = require('url');
 
 app.use('/', router.get("/upload/:file", async (req, res) => {
-    // res.send(req.params.file)
 
-    /**Lấy tên file ảnh */
+    /**Lấy tên file video */
     var params = url.parse(req.url, true).query;
     const filePath = params.id;
     console.log(params)
@@ -51,14 +50,25 @@ app.use('/', router.get("/upload/:file", async (req, res) => {
         }
     });
 
-    // try { 
-    //     let data = await fs.readFileSync(fakeString);
-    //     console.log("d: ",data);
-    //     res.send(data)
-    // } catch (err) { 
-    //     console.error(err);
-    //     res.status(500).send("Something bad happened");
-    // }
+}))
+
+app.use('/', router.get("/image/:file", async (req, res) => {
+
+    /**Lấy tên file video */
+    var params = url.parse(req.url, true).query;
+    const filePath = params.id;
+    console.log(params)
+    /**Đọc file ảnh và gửi */
+    const fakeString = __dirname + `/upload/images/${req.params.file}`;
+    console.log(fakeString);
+
+    fs.readFile(fakeString, function (err, data) {
+        if (!err) {
+            res.end(data)
+        } else {
+            res.end(null)
+        }
+    });
 
 }))
 /*------------------------------------*/

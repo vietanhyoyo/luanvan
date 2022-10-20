@@ -42,6 +42,11 @@ class NewsService extends BaseService {
         return result;
     }
 
+    likeReComment = async (reCommentID) => {
+        const result = await this.api.post('/news/like-recomment', { reCommentID });
+        return result;
+    }
+
 }
 
 export default NewsService;

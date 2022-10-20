@@ -51,8 +51,8 @@ const EditContent = (props) => {
 
     const handleSave = async () => {
         try {
-            let videoPath = {path: ""};
-            if (file !== []) {
+            let videoPath = { path: "" };
+            if (file.length !== 0) {
                 await uploadVideo(videoPath);
             }
             const result = await lessonService.addLessonContent(text, props.lesson._id, videoPath.path);
@@ -69,8 +69,8 @@ const EditContent = (props) => {
             const data = result.data;
             if (data !== "") {
                 setText(data.text);
-                if (data.video !== "" && data.video){
-                    setFile([{name: data.video}])
+                if (data.video !== "" && data.video) {
+                    setFile([{ name: data.video }])
                 }
             }
         } catch (error) {
@@ -116,6 +116,7 @@ const EditContent = (props) => {
     }
 
     const uploadVideo = async (videoPath) => {
+        console.log(file)
         let formData = new FormData();
 
         const config = {
@@ -141,6 +142,9 @@ const EditContent = (props) => {
             getAPISubjectList();
         }
     }, [open])
+
+
+    console.log(file)
 
     return checkEdit() ? (<>
         <div>

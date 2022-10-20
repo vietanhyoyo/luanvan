@@ -1,3 +1,4 @@
+import { Typography } from "@mui/material";
 import { useEffect, useState } from "react";
 import ScheduleService from "services/objects/schedule.service";
 
@@ -11,7 +12,6 @@ const ScheduleLesson = ({ scheduleID, classID, weekday, lessonNumber }) => {
     const getAPI = async () => {
         try {
             const result = await scheduleService.getScheduleLessonByNumber(scheduleID, classID, weekday, lessonNumber);
-            console.log(result)
             setLesson(result.data)
             setLoading(false)
         } catch (error) {
@@ -29,7 +29,7 @@ const ScheduleLesson = ({ scheduleID, classID, weekday, lessonNumber }) => {
     }, [scheduleID, classID])
 
     return <>
-        <p>{lesson.subject ? lesson.subject.name : '.'}</p>
+        <Typography variant="body2">{lesson.subject ? lesson.subject.name : '.'}</Typography>
     </>
 }
 

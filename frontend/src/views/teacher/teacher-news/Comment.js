@@ -1,8 +1,8 @@
 import MainCard from "ui-component/cards/MainCard";
 import moment from "moment";
 import {
-    Grid, Box, Avatar, Typography, Button,
-    IconButton, Input, Link
+    Box, Avatar, Typography,
+    IconButton, Input,
 } from "@mui/material"
 import { IconHeart } from '@tabler/icons';
 import ReplyIcon from '@mui/icons-material/Reply';
@@ -18,6 +18,7 @@ function formatInputDate(dateString) {
         date = new Date(dateString);
     return moment(date).format('DD-MM-YYYY');
 }
+const baseUrl = process.env.REACT_APP_BASE_URL
 const newsService = new NewsService();
 const borderColor = '#F4F6F8'
 
@@ -25,7 +26,8 @@ const Comment = (props) => {
 
     const [comment, setComment] = useState({
         createUser: {
-            name: 'No name'
+            name: 'No name',
+            avatar: ''
         },
         text: '',
         usersLike: []
@@ -43,10 +45,13 @@ const Comment = (props) => {
         setOpenInput(!openInput)
     }
 
-    const addReComment = async () => {
+    const addReComment = async (e) => {
+        e.preventDefault();
         try {
             const result = await newsService.addReComment(reComment.text, reComment.comment)
-            console.log(result)
+            setReComment(prev => ({ ...prev, text: "" }))
+            getReComment();
+            setOpenInput(false);
         } catch (error) {
             console.log(error)
         }
@@ -56,7 +61,6 @@ const Comment = (props) => {
         try {
             const result = await newsService.getReComment(props.comment._id)
             setReCommentList(result.data)
-            console.log(result)
         } catch (error) {
             console.log(error)
         }
@@ -92,7 +96,15 @@ const Comment = (props) => {
 
     return <Box>
         <Box display="flex" marginBottom={2}>
-            <Avatar sx={{ width: 28, height: 28 }}>F</Avatar>
+            {comment.createUser.avatar ? <Avatar
+                alt="profile"
+                src={baseUrl + "/image/" + comment.createUser.avatar}
+                sx={{ width: 28, height: 28 }}
+            /> : <Avatar
+                alt="profile"
+                label='T'
+                sx={{ width: 28, height: 28 }}
+            />}
             <Box sx={{
                 position: 'relative',
                 backgroundColor: borderColor,
@@ -147,8 +159,22 @@ const Comment = (props) => {
                 </Box>
             </Box>
         </Box>
-        {openInput && <Box display="flex" marginBottom={2}>
-            <Avatar sx={{ width: 28, height: 28, marginLeft: '40px' }}>F</Avatar>
+        {openInput && <form
+            style={{
+                display: "flex",
+                marginBottom: '16px'
+            }}
+            onSubmit={addReComment}
+        >
+            {props.userInfor.avatar ? <Avatar
+                alt="profile"
+                src={baseUrl + "/image/" + props.userInfor.avatar}
+                sx={{ width: 28, height: 28, marginLeft: '40px' }}
+            /> : <Avatar
+                alt="profile"
+                label='T'
+                sx={{ width: 28, height: 28, marginLeft: '40px' }}
+            />}
             <Input sx={{
                 position: 'relative',
                 marginLeft: '10px',
@@ -157,14 +183,16 @@ const Comment = (props) => {
                 border: `1px solid ${borderColor}`,
                 flex: 1
             }}
+                value={reComment.text}
+                name="recomment"
                 onChange={e => setReComment(prev => ({ ...prev, text: e.target.value }))}
                 variant="outlined"
                 fullWidth
             />
-            <IconButton color="primary" onClick={addReComment}>
+            <IconButton color="primary" type="submit">
                 <SendIcon />
             </IconButton>
-        </Box>}
+        </form>}
         {
 
             reCommentList.length !== 0 ?
@@ -175,7 +203,13 @@ const Comment = (props) => {
                     variant="body2"
                 >Xem phản hồi</Typography></Box> :
                     reCommentList.map((row, index) => {
-                        return <ReComment key={index} recomment={row} />
+                        return <ReComment
+                            key={index}
+                            recomment={row}
+                            userID={props.userID}
+                            userInfor={props.userInfor}
+                            getReComment={getReComment}
+                        />
                     }))
                 : <div></div>
         }

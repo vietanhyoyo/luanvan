@@ -3,6 +3,7 @@ const route = experss.Router();
 const authenMiddleware = require('../app/middlewares/authenMiddlewares')
 const newsController = require('../app/controllers/NewsController')
 
+route.post('/like-recomment', authenMiddleware, newsController.likeReComment)
 route.post('/like-comment', authenMiddleware, newsController.likeComment)
 route.post('/like-news', authenMiddleware, newsController.likeNews)
 route.post('/get-recomment-by-comment', authenMiddleware, newsController.getReCommentByComment)
