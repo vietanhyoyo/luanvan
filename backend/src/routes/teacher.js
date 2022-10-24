@@ -4,8 +4,8 @@ const route = experss.Router();
 const authenMiddleware = require('../app/middlewares/authenMiddlewares')
 const teacherController = require('../app/controllers/TeacherController')
 
-route.get('/get-classes-in-charge-by-teacher', teacherController.getClassesBySubjectTeacher);
-route.get('/get-teacher-information', teacherController.getTeacherInformation);
+route.get('/get-classes-in-charge-by-teacher', authenMiddleware, teacherController.getClassesBySubjectTeacher);
+route.get('/get-teacher-information', authenMiddleware, teacherController.getTeacherInformation);
 route.post('/get-teacher-by-subject', authenMiddleware, teacherController.getTeacherBySubject);
 route.post('/update-teacher', authenMiddleware, teacherController.updateTeacher);
 route.post('/get-teacher-by-id', authenMiddleware, teacherController.getTeacherById);

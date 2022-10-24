@@ -98,7 +98,8 @@ const StudentHome = () => {
                             <Grid item sm={12} xs={12} md={12} lg={12}>
                                 <LabelCard 
                                 isLoading={false} 
-                                classroomName={student.class.name || " "}
+                                classroomName={student.class.name || null}
+                                classID={student.class._id || null}
                                 />
                             </Grid>
                             <Grid item sm={12} xs={12} md={12} lg={12}>

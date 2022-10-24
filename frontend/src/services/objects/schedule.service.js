@@ -50,6 +50,22 @@ class ScheduleService extends BaseService {
         );
         return result;
     }
+
+    getScheduleLessonByTeacher = async (id, teacherID, weekday, lessonNumber) => {
+        const result = await this.api.post(
+            '/schedule/get-schedule-lesson-by-teacher',
+            { id, teacherID, weekday, lessonNumber }
+        );
+        return result;
+    }
+
+    getScheduleLessonByClass = async (classID, lessonNumber) => {
+        const result = await this.api.post(
+            '/schedule/get-schedule-lesson-by-class',
+            { classID, lessonNumber }
+        );
+        return result;
+    }
 }
 
 export default ScheduleService;

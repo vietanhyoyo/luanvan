@@ -73,33 +73,15 @@ app.use('/', router.get("/image/:file", async (req, res) => {
 }))
 /*------------------------------------*/
 
+/**Sử dụng socket.io tạo server socket*/
+const http = require('http');
+const server = http.createServer(app);
+const { Server } = require('socket.io');
+const socket = require('./socket')
+socket(new Server(server));
 
 
-
-/******************* */
-/**Tạo một kênh để chia sẽ hình ảnh lắng nghe ở cổng localhost:8000 */
-// const url = require('url');
-// const http = require('http');
-// const fs = require('fs');
-// /**Tạo cổng lắng nghe 5001 */
-// http.createServer(function (req, res) {
-//     /**Lấy tên file ảnh */
-//     var params = url.parse(req.url, true).query;
-//     const filePath = params.id;
-//     console.log(params)
-//     /**Đọc file ảnh và gửi */
-//     const fakeString = __dirname + `/upload/videos/${filePath}`;
-//     console.log(fakeString);
-//     fs.readFile(fakeString, function (err, data) {
-//         if (err) res.end(null);
-//         else
-//             res.send(data); // Send the file data to the browser.
-//     });
-
-// }).listen(5002, "127.0.0.1");
-
-
-app.listen(PORT, () => {
+server.listen(PORT, () => {
     console.log(`App listening at http://localhost:${PORT}`)
 })
 

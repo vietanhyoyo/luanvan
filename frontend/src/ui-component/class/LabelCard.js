@@ -10,6 +10,14 @@ import {
 // project imports
 import MainCard from 'ui-component/cards/MainCard';
 import TotalIncomeCard from 'ui-component/cards/Skeleton/TotalIncomeCard';
+import io from 'socket.io-client';
+import { useRef, useEffect, useState } from 'react';
+import ManagementService from 'services/objects/management.service';
+import ScheduleService from 'services/objects/schedule.service';
+
+const managementService = new ManagementService();
+const scheduleService = new ScheduleService();
+const baseUrl = process.env.REACT_APP_BASE_URL;
 
 const StyledBadge = styled(Badge)(({ theme }) => ({
     '& .MuiBadge-badge': {
@@ -88,7 +96,66 @@ const AnimateText = styled(Typography)(({ theme }) => ({
 
 // ==============================|| DASHBOARD - TOTAL INCOME DARK CARD ||============================== //
 
-const LabelCard = ({ isLoading, classroomName }) => {
+const LabelCard = ({ isLoading, classroomName, classID }) => {
+
+    const [learnStatus, setLearnStatus] = useState('offline');
+    const [subject, setSubject] = useState(null)
+    /**Socket để kết nối đến server */
+    const socket = useRef();
+
+    const openSocket = () => {
+        const nDate = new Date(2022, 9, 24, 16, 21, 0)
+        // const nDate = new Date()
+        /**Gửi lên socket */
+        socket.current.emit('online-meeting', {
+            hour: nDate.getHours(),
+            minute: nDate.getMinutes()
+        });
+        /**Lắng nghe socket */
+        socket.current.on('online-meeting-client', data => {
+            if (data.lessonNumber !== 0) {
+                if (classID) getSubject(String(data.lessonNumber));
+            }
+        });
+    }
+
+    const getSubject = async (number) => {
+        try {
+            const result = await scheduleService.getScheduleLessonByClass(classID, number);
+            if (result.data.subject) {
+                setSubject(result.data.subject)
+            }
+            else setSubject(null)
+        } catch (error) {
+            console.log(error)
+        }
+    }
+    /**Lấy dữ liệu */
+    const getAPI = async () => {
+        try {
+            const result = await managementService.get();
+            const status = result.data.learnStatus
+            if (status === 'online') {
+                openSocket()
+                setLearnStatus('online')
+            }
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
+    /**Kết nối với socket */
+    useEffect(() => {
+        const socketIO = io(baseUrl, { transports: ['websocket'] })
+        socket.current = socketIO;
+
+        getAPI()
+
+        return () => {
+            if (learnStatus === 'online')
+                socket.current.removeAllListeners('online-meeting-client');
+        }
+    }, [classID]);
 
     return (
         <>
@@ -99,18 +166,20 @@ const LabelCard = ({ isLoading, classroomName }) => {
                     <Box sx={{ p: 2 }}>
                         <List sx={{ py: 0, display: "flex", justifyContent: "space-between" }}>
                             <Typography variant="h2" sx={{ color: '#fff' }}>
-                                Lớp {classroomName}
+                                Lớp {classroomName || " "}
                             </Typography>
-                            <StyledBadge
-                                anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
-                                variant="dot"
-                            >
-                                <a href='https://meet.google.com/tcq-nhir-zyg' target="_blank">
-                                    <AnimateText>
-                                        Môn Toán đang diễn ra ...
-                                    </AnimateText>
-                                </a>
-                            </StyledBadge>
+                            {subject ?
+                                <StyledBadge
+                                    anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+                                    variant="dot"
+                                >
+                                    <a href='https://meet.google.com/tcq-nhir-zyg' target="_blank">
+                                        <AnimateText>
+                                            Môn " {subject.name} " đang diễn ra...
+                                        </AnimateText>
+                                    </a>
+                                </StyledBadge> : <div></div>
+                            }
                         </List>
                     </Box>
                 </CardWrapper>

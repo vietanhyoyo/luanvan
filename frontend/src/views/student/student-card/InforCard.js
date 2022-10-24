@@ -24,7 +24,7 @@ const InforCard = () => {
     });
     const [loading, setLoading] = useState(true)
 
-    const getTeacherInformation = async () => {
+    const getAPI = async () => {
         try {
             const result = await studentService.getStudentInformation()
             setStudent(result.data);
@@ -35,7 +35,7 @@ const InforCard = () => {
     }
 
     useEffect(() => {
-        getTeacherInformation();
+        getAPI();
     }, [])
 
     return loading ? (

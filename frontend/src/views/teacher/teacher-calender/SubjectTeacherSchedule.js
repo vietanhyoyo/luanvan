@@ -11,7 +11,7 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import ScheduleService from 'services/objects/schedule.service';
 import { useTheme } from '@emotion/react';
 import { useSelector } from 'react-redux';
-import ScheduleLesson from './ScheduleLesson'
+import SubjectScheduleLesson from './SubjectScheduleLesson'
 
 function createData(time, number, monday, tuesday, wednesday, thursday, friday) {
     return { time, number, monday, tuesday, wednesday, thursday, friday };
@@ -53,7 +53,6 @@ const SubjectTeacherSchedule = () => {
     }, [])
 
     return (<>
-    <h1>Giao viene bo mon</h1>
         <Box sx={{
             borderRadius: `${customization.borderRadius}px`,
             backgroundColor: theme.palette.background.paper,
@@ -67,7 +66,7 @@ const SubjectTeacherSchedule = () => {
                     aria-controls="panel2a-content"
                     id="panel2a-header"
                 >
-                    <Typography>Thời khóa biểu</Typography>
+                    <Typography>Thời khóa biểu bộ môn</Typography>
                 </AccordionSummary>
                 <AccordionDetails sx={{ padding: '0px' }}>
                     <TableContainer size='small'>
@@ -92,45 +91,40 @@ const SubjectTeacherSchedule = () => {
                                         <TableCell align="left">{row.number}</TableCell>
                                         <TableCell align="left">{row.time}</TableCell>
                                         <TableCell align="center">
-                                            <ScheduleLesson
+                                            <SubjectScheduleLesson
                                                 scheduleID={schedule._id}
-                                                classID={classID}
                                                 weekday={row.monday}
                                                 lessonNumber={row.number}
                                                 teacherID={teacherID}
                                             />
                                         </TableCell>
                                         <TableCell align="center">
-                                            <ScheduleLesson
+                                            <SubjectScheduleLesson
                                                 scheduleID={schedule._id}
-                                                classID={classID}
                                                 weekday={row.tuesday}
                                                 lessonNumber={row.number}
                                                 teacherID={teacherID}
                                             />
                                         </TableCell>
                                         <TableCell align="center">
-                                            <ScheduleLesson
+                                            <SubjectScheduleLesson
                                                 scheduleID={schedule._id}
-                                                classID={classID}
                                                 weekday={row.wednesday}
                                                 lessonNumber={row.number}
                                                 teacherID={teacherID}
                                             />
                                         </TableCell>
                                         <TableCell align="center">
-                                            <ScheduleLesson
+                                            <SubjectScheduleLesson
                                                 scheduleID={schedule._id}
-                                                classID={classID}
                                                 weekday={row.thursday}
                                                 lessonNumber={row.number}
                                                 teacherID={teacherID}
                                             />
                                         </TableCell>
                                         <TableCell align="center">
-                                            <ScheduleLesson
+                                            <SubjectScheduleLesson
                                                 scheduleID={schedule._id}
-                                                classID={classID}
                                                 weekday={row.friday}
                                                 lessonNumber={row.number}
                                                 teacherID={teacherID}

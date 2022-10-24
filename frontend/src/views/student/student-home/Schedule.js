@@ -44,7 +44,6 @@ const Schedule = () => {
     React.useEffect(async () => {
         try {
             const result = await scheduleService.getScheduleOfUser()
-            console.log(result)
             setSchedule(result.data.schedule)
             setClassID(result.data.classID)
         } catch (error) {

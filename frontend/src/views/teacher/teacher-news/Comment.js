@@ -200,7 +200,7 @@ const Comment = (props) => {
                     onClick={() => setHidden(false)}
                     sx={{ marginTop: '-10px', marginLeft: '40px', marginBottom: '5px' }}
                 ><Typography
-                    variant="body2"
+                    variant="caption"
                 >Xem phản hồi</Typography></Box> :
                     reCommentList.map((row, index) => {
                         return <ReComment

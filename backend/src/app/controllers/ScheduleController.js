@@ -53,7 +53,7 @@ class ScheduleController {
                 res.send(result);
 
             } catch (error) {
-                res.send({message: "Error",error})
+                res.send({ message: "Error", error })
             }
         }
     }
@@ -158,7 +158,26 @@ class ScheduleController {
                 res.send(result);
 
             } catch (error) {
-                res.send({message: "Error",error})
+                res.send({ message: "Error", error })
+            }
+        }
+    }
+
+    async getScheduleLessonByTeacher(req, res) {
+        if (!req.body) res.sendStatus(400);
+        else {
+            try {
+                const data = req.body;
+
+                const result = await ScheduleLesson
+                    .findOne({ schedule: data.id, teacher: data.teacherID, weekday: data.weekday, lessonNumber: data.lessonNumber })
+                    .populate({ path: 'subject', model: 'Subject' })
+                    .populate({ path: 'class', model: 'Class' })
+
+                res.send(result);
+
+            } catch (error) {
+                res.send({ message: "Error", error })
             }
         }
     }
@@ -182,17 +201,49 @@ class ScheduleController {
                 }
                 else if (user.role === 1) {
                     const teacher = await Teacher.findOne({ account: user._id })
-                    if(teacher.homeroomTeacher){
+                    if (teacher.homeroomTeacher) {
                         const schedule = await Schedule.findOne({}, {}, { sort: { 'endDate': -1 } })
                         res.send({ classID: teacher.homeroomClass, schedule, teacherID: teacher._id })
                     }
-                    else res.send(user)
+                    else {
+                        const schedule = await Schedule.findOne({}, {}, { sort: { 'endDate': -1 } })
+                        res.send({ schedule, teacherID: teacher._id })
+                    }
                 }
             }
         } catch (error) {
             res.send(error)
         }
 
+    }
+
+    async getScheduleLessonByClass(req, res) {
+        if (!req.body) res.sendStatus(400);
+        else {
+            try {
+                const schedule = await Schedule.findOne({}, {}, { sort: { 'endDate': -1 } })
+
+                const data = req.body;
+                const d = new Date(2022, 9, 18, 7, 30, 0)
+                console.log('Day: ', d.getDay());
+                const weekdays = ['Chủ nhật','Thứ hai', 'Thứ ba', 'Thứ tư', 'Thứ năm', 'Thứ sáu', 'Thứ bảy']
+
+                const result = await ScheduleLesson
+                    .findOne({
+                        schedule: schedule.id,
+                        weekday: weekdays[d.getDay()],
+                        lessonNumber: data.lessonNumber,
+                        class: data.classID
+                    })
+                    .populate({ path: 'subject', model: 'Subject' })
+                    .populate({ path: 'class', model: 'Class' })
+
+                res.send(result);
+
+            } catch (error) {
+                res.send({ message: "Error", error })
+            }
+        }
     }
 
 }
