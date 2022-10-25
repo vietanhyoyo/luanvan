@@ -100,11 +100,12 @@ const LabelCard = ({ isLoading, classroomName, classID }) => {
 
     const [learnStatus, setLearnStatus] = useState('offline');
     const [subject, setSubject] = useState(null)
+    const [link, setLink] = useState(null)
     /**Socket để kết nối đến server */
     const socket = useRef();
 
     const openSocket = () => {
-        const nDate = new Date(2022, 9, 24, 16, 21, 0)
+        const nDate = new Date()
         // const nDate = new Date()
         /**Gửi lên socket */
         socket.current.emit('online-meeting', {
@@ -116,14 +117,21 @@ const LabelCard = ({ isLoading, classroomName, classID }) => {
             if (data.lessonNumber !== 0) {
                 if (classID) getSubject(String(data.lessonNumber));
             }
+            else{
+                setSubject(null);
+                setLink(null);
+            }
         });
     }
 
     const getSubject = async (number) => {
         try {
             const result = await scheduleService.getScheduleLessonByClass(classID, number);
-            if (result.data.subject) {
-                setSubject(result.data.subject)
+            if (result.data.data.subject) {
+                setSubject(result.data.data.subject)
+                if (result.data.link) {
+                    setLink(result.data.link.link)
+                }
             }
             else setSubject(null)
         } catch (error) {
@@ -173,7 +181,7 @@ const LabelCard = ({ isLoading, classroomName, classID }) => {
                                     anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
                                     variant="dot"
                                 >
-                                    <a href='https://meet.google.com/tcq-nhir-zyg' target="_blank">
+                                    <a href={link || ''} target={link && "_blank"}>
                                         <AnimateText>
                                             Môn " {subject.name} " đang diễn ra...
                                         </AnimateText>

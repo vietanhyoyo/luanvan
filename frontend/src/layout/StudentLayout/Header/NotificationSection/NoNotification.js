@@ -18,7 +18,7 @@ import {
 } from '@mui/material';
 
 // assets
-import { IconBrandTelegram, IconBuildingStore, IconMailbox, IconPhoto, IconBrandZoom } from '@tabler/icons';
+import { IconBrandTelegram, IconBuildingStore, IconMailbox, IconPhoto, IconBrandZoom, IconHourglassEmpty } from '@tabler/icons';
 import User1 from 'assets/images/users/user-round.svg';
 import { Link } from 'react-router-dom';
 
@@ -54,7 +54,7 @@ const AnimateButton = styled(Button)(({ theme }) => ({
 
 // ==============================|| NOTIFICATION LIST ITEM ||============================== //
 
-const NotificationList = (props) => {
+const NoNotification = (props) => {
     const theme = useTheme();
 
     const chipSX = {
@@ -102,7 +102,7 @@ const NotificationList = (props) => {
                 }
             }}
         >
-            <ListItemWrapper>
+            {/* <ListItemWrapper>
                 <ListItem alignItems="center">
                     {props.icon &&
                     <ListItemAvatar>
@@ -137,7 +137,7 @@ const NotificationList = (props) => {
                             <Grid item>
                                 {
                                     props.isButton &&
-                                    <a href={props.link || ""} target={props.link && "_blank"}>
+                                    <a href="https://meet.google.com/fbm-pwye-zpm" target="_blank">
                                         <AnimateButton variant="contained" disableElevation>
                                             {props.buttonText || " "}
                                         </AnimateButton>
@@ -147,9 +147,9 @@ const NotificationList = (props) => {
                         </Grid>
                     </Grid>
                 </Grid>
-            </ListItemWrapper>
-            <Divider />
-            {/* <ListItemWrapper>
+            </ListItemWrapper> */}
+            {/* <Divider />
+            <ListItemWrapper>
                 <ListItem alignItems="center">
                     <ListItemAvatar>
                         <Avatar alt="John Doe" src={User1} />
@@ -181,7 +181,7 @@ const NotificationList = (props) => {
                     </Grid>
                 </Grid>
             </ListItemWrapper>
-            <Divider />
+            <Divider /> */}
             <ListItemWrapper>
                 <ListItem alignItems="center">
                     <ListItemAvatar>
@@ -193,34 +193,27 @@ const NotificationList = (props) => {
                                 borderColor: theme.palette.success.main
                             }}
                         >
-                            <IconBuildingStore stroke={1.5} size="1.3rem" />
+                            <IconHourglassEmpty stroke={1.5} size="1.3rem" />
                         </Avatar>
                     </ListItemAvatar>
-                    <ListItemText primary={<Typography variant="subtitle1">Store Verification Done</Typography>} />
+                    <ListItemText primary={<Typography variant="subtitle1">Chưa có thông báo mới</Typography>} />
                     <ListItemSecondaryAction>
                         <Grid container justifyContent="flex-end">
                             <Grid item xs={12}>
-                                <Typography variant="caption" display="block" gutterBottom>
+                                {/* <Typography variant="caption" display="block" gutterBottom>
                                     2 min ago
-                                </Typography>
+                                </Typography> */}
                             </Grid>
                         </Grid>
                     </ListItemSecondaryAction>
                 </ListItem>
                 <Grid container direction="column" className="list-container">
                     <Grid item xs={12} sx={{ pb: 2 }}>
-                        <Typography variant="subtitle2">We have successfully received your request.</Typography>
-                    </Grid>
-                    <Grid item xs={12}>
-                        <Grid container>
-                            <Grid item>
-                                <Chip label="Unread" sx={chipErrorSX} />
-                            </Grid>
-                        </Grid>
+                        <Typography variant="subtitle2">Chúng tôi sẽ nhắc bạn khi có thông báo mới</Typography>
                     </Grid>
                 </Grid>
             </ListItemWrapper>
-            <Divider />
+            {/* <Divider />
             <ListItemWrapper>
                 <ListItem alignItems="center">
                     <ListItemAvatar>
@@ -310,9 +303,9 @@ const NotificationList = (props) => {
                         </Grid>
                     </Grid>
                 </Grid>
-            </ListItemWrapper>
+            </ListItemWrapper> */}
             <Divider />
-            <ListItemWrapper>
+            {/* <ListItemWrapper>
                 <ListItem alignItems="center">
                     <ListItemAvatar>
                         <Avatar alt="John Doe" src={User1} />
@@ -345,4 +338,4 @@ const NotificationList = (props) => {
     );
 };
 
-export default NotificationList;
+export default NoNotification;
