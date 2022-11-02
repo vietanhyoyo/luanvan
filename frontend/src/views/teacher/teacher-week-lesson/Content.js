@@ -8,11 +8,12 @@ import moment from "moment";
 import { useState, useEffect, useRef } from 'react'
 import LessonService from "services/objects/lesson.service";
 import EditLesson from "./EditLesson";
-import { IconSquareX } from '@tabler/icons';
+import { IconSquareX, IconTools } from '@tabler/icons';
 import MuiAlert from '@mui/material/Alert';
 import DeleteLesson from './DeleteLesson';
 import ReactPlayer from 'react-player'
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
 const Alert = React.forwardRef(function Alert(props, ref) {
     return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
@@ -35,6 +36,7 @@ const lessonService = new LessonService();
 
 const Content = (props) => {
 
+    const navigate = useNavigate();
     const theme = useTheme();
     const [lessonContent, setLessonContent] = useState({
         _id: '',
@@ -219,6 +221,12 @@ const Content = (props) => {
                             </video>
                     }
                     <EditContent lesson={props.lesson} reLoad={getAPI} grade={props.grade} />
+                    <Button
+                        startIcon={<IconTools />}
+                        onClick={() => {
+                            navigate(`/teacher/add-content-test/${props.lesson ? props.lesson._id : '0'}`)
+                        }}
+                    >Thêm bài tập trắc nghiệm</Button>
                 </Box>
             </Box>
             <Stack spacing={2} sx={{ width: '100%' }}>

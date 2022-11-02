@@ -28,6 +28,7 @@ import PerfectScrollbar from 'react-perfect-scrollbar';
 import MainCard from 'ui-component/cards/MainCard';
 import Transitions from 'ui-component/extended/Transitions';
 import NotificationList from './NotificationList';
+import NoNotification from './NoNotification';
 
 // assets
 import { IconBell } from '@tabler/icons';
@@ -151,22 +152,22 @@ const NotificationSection = () => {
                                             <Grid container alignItems="center" justifyContent="space-between" sx={{ pt: 2, px: 2 }}>
                                                 <Grid item>
                                                     <Stack direction="row" spacing={2}>
-                                                        <Typography variant="subtitle1">All Notification</Typography>
-                                                        <Chip
+                                                        <Typography variant="subtitle1">Thông báo</Typography>
+                                                        {/* <Chip
                                                             size="small"
                                                             label="01"
                                                             sx={{
                                                                 color: theme.palette.background.default,
                                                                 bgcolor: theme.palette.warning.dark
                                                             }}
-                                                        />
+                                                        /> */}
                                                     </Stack>
                                                 </Grid>
-                                                <Grid item>
+                                                {/* <Grid item>
                                                     <Typography component={Link} to="#" variant="subtitle2" color="primary">
                                                         Mark as all read
                                                     </Typography>
-                                                </Grid>
+                                                </Grid> */}
                                             </Grid>
                                         </Grid>
                                         <Grid item xs={12}>
@@ -174,7 +175,7 @@ const NotificationSection = () => {
                                                 style={{ height: '100%', maxHeight: 'calc(100vh - 205px)', overflowX: 'hidden' }}
                                             >
                                                 <Grid container direction="column" spacing={2}>
-                                                    <Grid item xs={12}>
+                                                    {/* <Grid item xs={12}>
                                                         <Box sx={{ px: 2, pt: 0.25 }}>
                                                             <TextField
                                                                 id="outlined-select-currency-native"
@@ -193,19 +194,20 @@ const NotificationSection = () => {
                                                                 ))}
                                                             </TextField>
                                                         </Box>
-                                                    </Grid>
+                                                    </Grid> */}
                                                     <Grid item xs={12} p={0}>
                                                         <Divider sx={{ my: 0 }} />
                                                     </Grid>
                                                 </Grid>
-                                                <NotificationList />
+                                                {/* <NotificationList /> */}
+                                                <NoNotification />
                                             </PerfectScrollbar>
                                         </Grid>
                                     </Grid>
                                     <Divider />
                                     <CardActions sx={{ p: 1.25, justifyContent: 'center' }}>
                                         <Button size="small" disableElevation>
-                                            View All
+                                            Xem thêm
                                         </Button>
                                     </CardActions>
                                 </MainCard>

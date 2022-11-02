@@ -1,12 +1,14 @@
 
 import React from 'react'
 import { useTheme } from "@mui/material/styles"
-import { Box, Typography } from "@mui/material";
+import { Box, Typography, Button } from "@mui/material";
 import Text from "ui-component/Text";
 import moment from "moment";
 import { useState, useEffect, useRef } from 'react'
 import LessonService from "services/objects/lesson.service";
 import MuiAlert from '@mui/material/Alert';
+import QuestionService from 'services/objects/question.service';
+import { useNavigate } from 'react-router-dom'
 
 function formatInputDate(dateString) {
     let date = new Date(Date.now());
@@ -21,6 +23,7 @@ const contentStyle = {
     paddingLeft: "0px"
 }
 
+const questionService = new QuestionService();
 const lessonService = new LessonService();
 
 const ContentLesson = (props) => {
@@ -30,8 +33,9 @@ const ContentLesson = (props) => {
         _id: '',
         text: ''
     });
-
+    const [isQuestionTest, setIsQuestionTest] = useState(false);
     const divRender = useRef();
+    const navigate = useNavigate()
 
     const getAPI = async () => {
         try {
@@ -50,8 +54,23 @@ const ContentLesson = (props) => {
         }
     }
 
+    const getQuestionTest = async () => {
+        try {
+            const result = await questionService.getQuestionTest(props.lesson._id)
+            console.log(result)
+            if (result.data.status) {
+                setIsQuestionTest(true)
+            } else {
+                setIsQuestionTest(false)
+            }
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
     useEffect(() => {
-        getAPI()
+        getAPI();
+        getQuestionTest();
         return () => {
             setLessonContent({
                 _id: '',
@@ -131,6 +150,10 @@ const ContentLesson = (props) => {
                             </video>
                     }
                 </Box>
+                {isQuestionTest ?
+                    <Button onClick={() => navigate(`/student/question-test/${props.lesson._id}`)}>Làm bài tập trắc nghiệm</Button>
+                    : <div></div>
+                }
             </Box>
         </>)
 }

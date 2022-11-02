@@ -124,6 +124,25 @@ class LessonController {
         }
     }
 
+    getLessonById(req, res) {
+        if (!req.params) {
+            res.sendStatus(400);
+        }
+        else {
+            const { idLesson } = req.params;
+            Lesson.findOne({ _id: idLesson })
+                .populate({ path: 'subject', model: 'Subject' })
+                .populate({ path: 'class', model: 'Class' })
+                .populate({ path: 'week', model: 'Week' })
+                .exec((err, doc) => {
+                    if (err) res.send(err);
+                    else {
+                        res.send(doc);
+                    }
+                })
+        }
+    }
+
 }
 
 module.exports = new LessonController;

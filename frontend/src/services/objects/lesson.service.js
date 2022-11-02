@@ -41,6 +41,11 @@ class LessonService extends BaseService {
         const result = await this.api.post('/lesson/delete-by-id', { id });
         return result
     }
+
+    getLessonById = async (idLesson) => {
+        const result = await this.api.get(`/lesson/get-lesson-by-id/${idLesson}`);
+        return result
+    }
 }
 
 export default LessonService;

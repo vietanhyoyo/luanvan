@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, forwardRef } from 'react';
 
 // material-ui
 import { useTheme } from '@mui/material/styles';
@@ -14,7 +14,9 @@ import {
     InputLabel,
     OutlinedInput,
     Stack,
-    Typography
+    Typography,
+    Alert as MuiAlert,
+    Snackbar
 } from '@mui/material';
 
 // third party
@@ -33,9 +35,14 @@ import { useNavigate } from 'react-router';
 import axios from 'axios';
 
 // ============================|| FIREBASE - LOGIN ||============================ //
+const Alert = forwardRef(function Alert(props, ref) {
+    return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
+});
 
 const FirebaseLogin = ({ ...others }) => {
 
+    const [open, setOpen] = useState(false);
+    const [alertText, setAlertText] = useState();
     const navigate = useNavigate();
     const [account, setAccount] = useState({
         username: "",
@@ -67,11 +74,21 @@ const FirebaseLogin = ({ ...others }) => {
         return bool;
     }
 
+    const handleClick = () => {
+        setOpen(true);
+    };
+
+    const handleClose = (event, reason) => {
+        if (reason === 'clickaway') {
+            return;
+        }
+        setOpen(false);
+    };
+
     //Su kien submit
     const handleLogin = () => {
 
         if (!validationAccount()) {
-            alert('Thông tin chưa hợp lệ!');
             return
         }
 
@@ -79,7 +96,8 @@ const FirebaseLogin = ({ ...others }) => {
             .then(res => res.data)
             .then(res => {
                 if (res.status === "Error") {
-                    console.log(res);
+                    handleClick();
+                    setAlertText(res.message);
                 }
                 else {
                     sessionStorage.setItem('ACCESS_TOKEN', res.accessToken);
@@ -161,7 +179,7 @@ const FirebaseLogin = ({ ...others }) => {
                                 label="Tài khoản"
                                 inputProps={{}}
                             />
-                            {touched.email && errors.email && (
+                            {errorAccount.username && (
                                 <FormHelperText error id="standard-weight-helper-text-email-login">
                                     Bạn chưa điền tài khoản
                                 </FormHelperText>
@@ -215,7 +233,7 @@ const FirebaseLogin = ({ ...others }) => {
                                 label="Mật khẩu"
                                 inputProps={{}}
                             />
-                            {touched.password && errors.password && (
+                            {errorAccount.password && (
                                 <FormHelperText error id="standard-weight-helper-text-password-login">
                                     Bạn chưa điền mật khẩu
                                 </FormHelperText>
@@ -261,6 +279,11 @@ const FirebaseLogin = ({ ...others }) => {
                     </form>
                 )}
             </Formik>
+            <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
+                <Alert onClose={handleClose} severity="error" sx={{ width: '100%' }}>
+                    {alertText}
+                </Alert>
+            </Snackbar>
         </>
     );
 };

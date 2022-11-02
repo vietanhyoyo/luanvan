@@ -16,6 +16,7 @@ const TeacherHome = Loadable(lazy(() => import('views/teacher/TeacherHome')))
 const LinkEdit = Loadable(lazy(() => import('views/teacher/LinkEdit')))
 const TeacherNews = Loadable(lazy(() => import('views/teacher/TeacherNews')))
 const TeacherProfile = Loadable(lazy(() => import('views/teacher/TeacherProfile')))
+const AddContentTest = Loadable(lazy(() => import('views/teacher/AddContentTest')))
 // ==============================|| MAIN ROUTING ||============================== //
 
 const TeacherRoutes = {
@@ -57,6 +58,10 @@ const TeacherRoutes = {
         {
             path: '/teacher/profile',
             element: <TeacherProfile />
+        },
+        {
+            path: '/teacher/add-content-test/:id',
+            element: <AddContentTest />
         }
     ]
 };

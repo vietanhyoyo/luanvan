@@ -25,10 +25,10 @@ class AuthorController {
 
                     res.send({ status: "Success", accessToken, refreshToken, role });
                 } else {
-                    res.send({ message: "Mat khau khong dung!", status: "Error" });
+                    res.send({ message: "Mật khẩu không đúng!", status: "Error" });
                 }
             }
-            else res.send({ message: "Tai khoan khong dung!", status: "Error" });
+            else res.send({ message: "Tài khoản không đúng!", status: "Error" });
         }
         else res.send({ message: "Chua nhap thong tin!", status: "Error" });
     }

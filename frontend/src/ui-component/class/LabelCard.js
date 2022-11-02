@@ -117,7 +117,7 @@ const LabelCard = ({ isLoading, classroomName, classID }) => {
             if (data.lessonNumber !== 0) {
                 if (classID) getSubject(String(data.lessonNumber));
             }
-            else{
+            else {
                 setSubject(null);
                 setLink(null);
             }
@@ -127,13 +127,15 @@ const LabelCard = ({ isLoading, classroomName, classID }) => {
     const getSubject = async (number) => {
         try {
             const result = await scheduleService.getScheduleLessonByClass(classID, number);
-            if (result.data.data.subject) {
-                setSubject(result.data.data.subject)
-                if (result.data.link) {
-                    setLink(result.data.link.link)
+            if (result.data.status === 'on') {
+                if (result.data.data.subject) {
+                    setSubject(result.data.data.subject)
+                    if (result.data.link) {
+                        setLink(result.data.link.link)
+                    }
                 }
-            }
-            else setSubject(null)
+                else setSubject(null)
+            } else setSubject(null)
         } catch (error) {
             console.log(error)
         }

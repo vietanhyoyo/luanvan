@@ -36,10 +36,10 @@ module.exports = [
     },
     {
         number: 6,
-        start_hour: 14,
-        start_minute: 0,
-        end_hour: 14,
-        end_minute: 35
+        start_hour: 17,
+        start_minute: 9,
+        end_hour: 17,
+        end_minute: 10
     },
     {
         number: 7,

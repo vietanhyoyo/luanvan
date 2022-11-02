@@ -116,7 +116,7 @@ class StudentController {
                 // console.log(err, data)
                 if (err) res.sendStatus(403);
                 else {
-                    console.log('student: ', )
+                    console.log('student: ',)
                     Student.findOne({ account: data._id })
                         .populate({ path: 'class', model: 'Class' })
                         .populate({ path: 'account', model: 'Account' })
@@ -126,6 +126,16 @@ class StudentController {
                         })
                 };
             });
+        }
+    }
+
+    async countStudent(req, res) {
+        try {
+            const students = await Student.find({});
+            console.log(students.length)
+            res.send({ countStudent: students.length });
+        } catch (error) {
+            res.send(error);
         }
     }
 

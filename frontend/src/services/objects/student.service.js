@@ -32,6 +32,11 @@ class StudentService extends BaseService {
         return result;
     }
 
+    count = async () => {
+        const result = await this.api.get('/student/count-student');
+        return result;
+    }
+
 }
 
 export default StudentService;

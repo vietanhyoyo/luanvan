@@ -4,6 +4,7 @@ const route = experss.Router();
 const authenMiddleware = require('../app/middlewares/authenMiddlewares')
 const studentController = require('../app/controllers/StudentController')
 
+route.get('/count-student', authenMiddleware, studentController.countStudent);
 route.get('/get-information', authenMiddleware, studentController.getInformation);
 route.post('/update-student', authenMiddleware, studentController.updateStudent);
 route.post('/get-student-by-id', authenMiddleware, studentController.getStudentById);

@@ -7,6 +7,7 @@ import SubjectCard from "./teacher-home/SubjectCard";
 import { useNavigate } from "react-router-dom";
 import MainCard from "ui-component/cards/MainCard";
 import LeftCardHome from "./teacher-home/LeftCardHome";
+import LeftCard from './teacher-card/LeftCard';
 import { gridSpacing } from 'store/constant';
 
 const teacherService = new TeacherService();
@@ -77,7 +78,7 @@ const TeacherHome = () => {
                         }
                     </Grid>
                     <Grid item lg={4} md={4} sm={12} xs={12}>
-                        <LeftCardHome />
+                        <LeftCard />
                     </Grid>
                 </Grid>
             </Grid>

@@ -35,17 +35,21 @@ import MainCard from 'ui-component/cards/MainCard';
 import Transitions from 'ui-component/extended/Transitions';
 import UpgradePlanCard from './UpgradePlanCard';
 import User1 from 'assets/images/users/user-round.svg';
+import AccountService from 'services/objects/account.service';
 
 // assets
 import { IconLogout, IconSearch, IconSettings, IconUser } from '@tabler/icons';
 
 // ==============================|| PROFILE MENU ||============================== //
+const accountService = new AccountService();
+const baseUrl = process.env.REACT_APP_BASE_URL;
 
 const ProfileSection = () => {
     const theme = useTheme();
     const customization = useSelector((state) => state.customization);
     const navigate = useNavigate();
 
+    const [user, setUser] = useState(null);
     const [sdm, setSdm] = useState(true);
     const [value, setValue] = useState('');
     const [notification, setNotification] = useState(false);
@@ -60,6 +64,16 @@ const ProfileSection = () => {
         localStorage.clear();
         navigate('/');
     };
+
+    const getUserInformation = async () => {
+        try {
+            const result = await accountService.getUserInfo();
+            setUser(result.data)
+            console.log(result)
+        } catch (error) {
+            console.log(error);
+        }
+    }
 
     const handleClose = (event) => {
         if (anchorRef.current && anchorRef.current.contains(event.target)) {
@@ -85,9 +99,12 @@ const ProfileSection = () => {
         if (prevOpen.current === true && open === false) {
             anchorRef.current.focus();
         }
-
         prevOpen.current = open;
     }, [open]);
+
+    useEffect(() => {
+        getUserInformation();
+    }, [])
 
     return (
         <>
@@ -113,7 +130,7 @@ const ProfileSection = () => {
                 }}
                 icon={
                     <Avatar
-                        src={User1}
+                        src={user ? (baseUrl + "/image/" + user.avatar) : User1}
                         sx={{
                             ...theme.typography.mediumAvatar,
                             margin: '8px 0 8px 8px !important',
@@ -159,12 +176,12 @@ const ProfileSection = () => {
                                     <Box sx={{ p: 2 }}>
                                         <Stack>
                                             <Stack direction="row" spacing={0.5} alignItems="center">
-                                                <Typography variant="h4">Good Morning,</Typography>
+                                                <Typography variant="h4">Xin chào,</Typography>
                                                 <Typography component="span" variant="h4" sx={{ fontWeight: 400 }}>
-                                                    Johne Doe
+                                                    {user ? user.name : ""}
                                                 </Typography>
                                             </Stack>
-                                            <Typography variant="subtitle2">Project Admin</Typography>
+                                            <Typography variant="subtitle2">Quản lý các nhân</Typography>
                                         </Stack>
                                     </Box>
                                     <PerfectScrollbar style={{ height: '100%', maxHeight: 'calc(100vh - 250px)', overflowX: 'hidden' }}>
@@ -209,16 +226,6 @@ const ProfileSection = () => {
                                                             <Grid container spacing={1} justifyContent="space-between">
                                                                 <Grid item>
                                                                     <Typography variant="body2">Cá nhân</Typography>
-                                                                </Grid>
-                                                                <Grid item>
-                                                                    <Chip
-                                                                        label="02"
-                                                                        size="small"
-                                                                        sx={{
-                                                                            bgcolor: theme.palette.warning.dark,
-                                                                            color: theme.palette.background.default
-                                                                        }}
-                                                                    />
                                                                 </Grid>
                                                             </Grid>
                                                         }

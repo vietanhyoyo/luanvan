@@ -1,4 +1,5 @@
 import PropTypes from 'prop-types';
+import { useState, useEffect } from 'react';
 
 // material-ui
 import { styled, useTheme } from '@mui/material/styles';
@@ -10,6 +11,10 @@ import TotalIncomeCard from 'ui-component/cards/Skeleton/TotalIncomeCard';
 
 // assets
 import TableChartOutlinedIcon from '@mui/icons-material/TableChartOutlined';
+import ManagementService from 'services/objects/management.service';
+import { IconHierarchy2 } from '@tabler/icons'
+
+const managementService = new ManagementService();
 
 // styles
 const CardWrapper = styled(MainCard)(({ theme }) => ({
@@ -43,6 +48,20 @@ const CardWrapper = styled(MainCard)(({ theme }) => ({
 
 const TotalIncomeDarkCard = ({ isLoading }) => {
     const theme = useTheme();
+    const [status, setStatus] = useState('');
+
+    const getStatus = async () => {
+        try {
+            const result = await managementService.get();
+            setStatus(result.data.learnStatus);
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    useEffect(() => {
+        getStatus();
+    }, [])
 
     return (
         <>
@@ -63,7 +82,7 @@ const TotalIncomeDarkCard = ({ isLoading }) => {
                                             color: '#fff'
                                         }}
                                     >
-                                        <TableChartOutlinedIcon fontSize="inherit" />
+                                        <IconHierarchy2 />
                                     </Avatar>
                                 </ListItemAvatar>
                                 <ListItemText
@@ -74,12 +93,12 @@ const TotalIncomeDarkCard = ({ isLoading }) => {
                                     }}
                                     primary={
                                         <Typography variant="h4" sx={{ color: '#fff' }}>
-                                            $203k
+                                            {status}
                                         </Typography>
                                     }
                                     secondary={
                                         <Typography variant="subtitle2" sx={{ color: 'primary.light', mt: 0.25 }}>
-                                            Total Income
+                                            Trạng thái dạy học
                                         </Typography>
                                     }
                                 />

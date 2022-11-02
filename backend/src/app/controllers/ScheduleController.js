@@ -5,7 +5,9 @@ const SchoolYear = require('../models/SchoolYear');
 const Class = require('../models/Class')
 const Student = require('../models/Student')
 const Teacher = require('../models/Teacher')
+const Link = require('../models/Link')
 const jwt = require("jsonwebtoken")
+const numberLesson = require('../../define/numberLesson')
 
 class ScheduleController {
 
@@ -224,21 +226,39 @@ class ScheduleController {
                 const schedule = await Schedule.findOne({}, {}, { sort: { 'endDate': -1 } })
 
                 const data = req.body;
-                const d = new Date(2022, 9, 18, 7, 30, 0)
-                console.log('Day: ', d.getDay());
-                const weekdays = ['Chủ nhật','Thứ hai', 'Thứ ba', 'Thứ tư', 'Thứ năm', 'Thứ sáu', 'Thứ bảy']
+                const d = new Date()
+                const weekdays = ['Chủ nhật', 'Thứ hai', 'Thứ ba', 'Thứ tư', 'Thứ năm', 'Thứ sáu', 'Thứ bảy']
+
+                const dataFind = {
+                    schedule: schedule.id,
+                    weekday: weekdays[d.getDay()],
+                    lessonNumber: data.lessonNumber,
+                    class: data.classID
+                }
 
                 const result = await ScheduleLesson
-                    .findOne({
-                        schedule: schedule.id,
-                        weekday: weekdays[d.getDay()],
-                        lessonNumber: data.lessonNumber,
-                        class: data.classID
-                    })
+                    .findOne(dataFind)
                     .populate({ path: 'subject', model: 'Subject' })
                     .populate({ path: 'class', model: 'Class' })
 
-                res.send(result);
+                if (result === null) {
+                    res.send({ data: result, numberLesson: data.lessonNumber, status: 'off' });
+                } else if (result.subject) {
+                    const nLesson = numberLesson[Number(data.lessonNumber) - 1];
+                    const lessonDate = new Date(d.getFullYear(), d.getMonth(), d.getDate(), nLesson.start_hour, nLesson.start_minute);
+                    const lessonTime = lessonDate.getTime();
+                    const dTime = d.getTime();
+                    const time = ((dTime - lessonTime) / 60000).toFixed(0);
+                    console.log(lessonTime, dTime, time);
+
+                    if (result.teacher) {
+                        const link = await Link.findOne({ teacher: result.teacher, status: 'on' })
+                        res.send({ data: result, numberLesson: nLesson, status: 'on', time, link });
+                    }
+                    else res.send({ data: result, numberLesson: nLesson, status: 'on', time });
+                } else {
+                    res.send({ data: result, numberLesson: data.lessonNumber, status: 'off' });
+                }
 
             } catch (error) {
                 res.send({ message: "Error", error })

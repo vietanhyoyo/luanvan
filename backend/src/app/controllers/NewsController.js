@@ -175,7 +175,7 @@ class NewsController {
                     const { commentID } = req.body;
                     const user = await jwt.verify(token, process.env.ACCESS_TOKEN_SECRET)
 
-                    let comment = await Comment.findById(commentID)
+                    let comment = await Comment.findById(commentID).populate({ path: 'createUser', model: 'Account' })
                     const usersLike = comment.usersLike;
                     const find = usersLike.indexOf(user._id)
 

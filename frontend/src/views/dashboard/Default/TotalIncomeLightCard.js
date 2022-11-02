@@ -1,4 +1,5 @@
 import PropTypes from 'prop-types';
+import { useState, useEffect } from 'react'
 
 // material-ui
 import { useTheme, styled } from '@mui/material/styles';
@@ -10,6 +11,10 @@ import TotalIncomeCard from 'ui-component/cards/Skeleton/TotalIncomeCard';
 
 // assets
 import StorefrontTwoToneIcon from '@mui/icons-material/StorefrontTwoTone';
+import TeacherService from 'services/objects/teacher.service';
+import PhotoCameraFrontOutlinedIcon from '@mui/icons-material/PhotoCameraFrontOutlined';
+
+const teacherService = new TeacherService();
 
 // styles
 const CardWrapper = styled(MainCard)(({ theme }) => ({
@@ -41,6 +46,20 @@ const CardWrapper = styled(MainCard)(({ theme }) => ({
 
 const TotalIncomeLightCard = ({ isLoading }) => {
     const theme = useTheme();
+    const [teacherTotal, setTeacherTotal] = useState(0);
+
+    const getTeacherTotal = async () => {
+        try {
+            const result = await teacherService.getAll();
+            setTeacherTotal(result.data.length);
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
+    useEffect(() => {
+        getTeacherTotal();
+    })
 
     return (
         <>
@@ -61,7 +80,7 @@ const TotalIncomeLightCard = ({ isLoading }) => {
                                             color: theme.palette.warning.dark
                                         }}
                                     >
-                                        <StorefrontTwoToneIcon fontSize="inherit" />
+                                        <PhotoCameraFrontOutlinedIcon fontSize="inherit" />
                                     </Avatar>
                                 </ListItemAvatar>
                                 <ListItemText
@@ -70,7 +89,7 @@ const TotalIncomeLightCard = ({ isLoading }) => {
                                         mt: 0.45,
                                         mb: 0.45
                                     }}
-                                    primary={<Typography variant="h4">$203k</Typography>}
+                                    primary={<Typography variant="h4">{teacherTotal} giáo viên</Typography>}
                                     secondary={
                                         <Typography
                                             variant="subtitle2"
@@ -79,7 +98,7 @@ const TotalIncomeLightCard = ({ isLoading }) => {
                                                 mt: 0.5
                                             }}
                                         >
-                                            Total Income
+                                            Tổng số giáo viên
                                         </Typography>
                                     }
                                 />

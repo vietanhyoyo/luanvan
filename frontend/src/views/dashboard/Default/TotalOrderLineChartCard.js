@@ -18,6 +18,7 @@ import ChartDataYear from './chart-data/total-order-year-line-chart';
 // assets
 import LocalMallOutlinedIcon from '@mui/icons-material/LocalMallOutlined';
 import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
+import { IconDoor, IconChartBubble } from '@tabler/icons'
 
 const CardWrapper = styled(MainCard)(({ theme }) => ({
     backgroundColor: theme.palette.primary.dark,
@@ -77,7 +78,7 @@ const TotalOrderLineChartCard = ({ isLoading }) => {
                 <SkeletonTotalOrderCard />
             ) : (
                 <CardWrapper border={false} content={false}>
-                    <Box sx={{ p: 2.25 }}>
+                    <Box sx={{ p: 2.25, minHeight: "184.688px" }}>
                         <Grid container direction="column">
                             <Grid item>
                                 <Grid container justifyContent="space-between">
@@ -92,11 +93,13 @@ const TotalOrderLineChartCard = ({ isLoading }) => {
                                                 mt: 1
                                             }}
                                         >
-                                            <LocalMallOutlinedIcon fontSize="inherit" />
+                                            <IconDoor />
                                         </Avatar>
                                     </Grid>
                                     <Grid item>
-                                        <Button
+                                        <Typography
+                                        >Năm học: 2022 - 2023</Typography>
+                                        {/* <Button
                                             disableElevation
                                             variant={timeValue ? 'contained' : 'text'}
                                             size="small"
@@ -113,36 +116,24 @@ const TotalOrderLineChartCard = ({ isLoading }) => {
                                             onClick={(e) => handleChangeTime(e, false)}
                                         >
                                             Year
-                                        </Button>
+                                        </Button> */}
                                     </Grid>
                                 </Grid>
                             </Grid>
                             <Grid item sx={{ mb: 0.75 }}>
                                 <Grid container alignItems="center">
-                                    <Grid item xs={6}>
+                                    <Grid item xs={8}>
                                         <Grid container alignItems="center">
                                             <Grid item>
                                                 {timeValue ? (
                                                     <Typography sx={{ fontSize: '2.125rem', fontWeight: 500, mr: 1, mt: 1.75, mb: 0.75 }}>
-                                                        $108
+                                                        7 lớp học
                                                     </Typography>
                                                 ) : (
                                                     <Typography sx={{ fontSize: '2.125rem', fontWeight: 500, mr: 1, mt: 1.75, mb: 0.75 }}>
-                                                        $961
+                                                        7 lớp học
                                                     </Typography>
                                                 )}
-                                            </Grid>
-                                            <Grid item>
-                                                <Avatar
-                                                    sx={{
-                                                        ...theme.typography.smallAvatar,
-                                                        cursor: 'pointer',
-                                                        backgroundColor: theme.palette.primary[200],
-                                                        color: theme.palette.primary.dark
-                                                    }}
-                                                >
-                                                    <ArrowDownwardIcon fontSize="inherit" sx={{ transform: 'rotate3d(1, 1, 1, 45deg)' }} />
-                                                </Avatar>
                                             </Grid>
                                             <Grid item xs={12}>
                                                 <Typography
@@ -152,13 +143,13 @@ const TotalOrderLineChartCard = ({ isLoading }) => {
                                                         color: theme.palette.primary[200]
                                                     }}
                                                 >
-                                                    Total Order
+                                                    Tổng số lớp
                                                 </Typography>
                                             </Grid>
                                         </Grid>
                                     </Grid>
-                                    <Grid item xs={6}>
-                                        {timeValue ? <Chart {...ChartDataMonth} /> : <Chart {...ChartDataYear} />}
+                                    <Grid item xs={4} display='flex' justifyContent='flex-end'>
+                                        <IconChartBubble width={60} height={60} />
                                     </Grid>
                                 </Grid>
                             </Grid>

@@ -31,6 +31,7 @@ const teacherService = new TeacherService();
 const videoService = new VideoService();
 
 const EditContent = (props) => {
+    const [isChangeVideo, setIsChangeVideo] = useState(false);
     const [text, setText] = useState("");
     const [open, setOpen] = React.useState(false);
     const [subjectList, setSubjectList] = useState([]);
@@ -46,6 +47,7 @@ const EditContent = (props) => {
 
     const handleClose = () => {
         setText("");
+        setIsChangeVideo(false)
         setOpen(false);
     };
 
@@ -56,6 +58,7 @@ const EditContent = (props) => {
                 await uploadVideo(videoPath);
             }
             const result = await lessonService.addLessonContent(text, props.lesson._id, videoPath.path);
+            handleClose();
             props.reLoad();
         } catch (error) {
             console.log(error)
@@ -116,6 +119,7 @@ const EditContent = (props) => {
     }
 
     const uploadVideo = async (videoPath) => {
+        if(!isChangeVideo) return -1;
         console.log(file)
         let formData = new FormData();
 
@@ -142,9 +146,6 @@ const EditContent = (props) => {
             getAPISubjectList();
         }
     }, [open])
-
-
-    console.log(file)
 
     return checkEdit() ? (<>
         <div>
@@ -193,6 +194,7 @@ const EditContent = (props) => {
                                     accept="video/mp4"
                                     type="file"
                                     onChange={event => {
+                                        setIsChangeVideo(true)
                                         const fileData = event.target.files;
                                         setFile(fileData);
                                     }}

@@ -6,10 +6,10 @@ import { Link, Typography, Stack } from '@mui/material';
 const AuthFooter = () => (
     <Stack direction="row" justifyContent="space-between">
         <Typography variant="subtitle2" component={Link} href="https://berrydashboard.io" target="_blank" underline="hover">
-            berrydashboard.io
+            vanhyoyo@gmail.com
         </Typography>
         <Typography variant="subtitle2" component={Link} href="https://codedthemes.com" target="_blank" underline="hover">
-            &copy; codedthemes.com
+            &copy; B1805739 Bui Viet Anh
         </Typography>
     </Stack>
 );

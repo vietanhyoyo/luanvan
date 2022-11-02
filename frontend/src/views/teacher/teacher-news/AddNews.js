@@ -18,9 +18,11 @@ const AddNews = () => {
 
     const handleSubmit = async () => {
         try {
-            const result = await newsService.addNews(text)
+            // const result = await newsService.addNews(text)
             handleClose()
-            console.log(result);
+            const firstIndex = text.indexOf('<img src="');
+            console.log(firstIndex);
+            console.log(text);
         } catch (error) {
             console.log(error)
         }
@@ -40,7 +42,12 @@ const AddNews = () => {
                 {"Thêm mới một bản tin"}
             </DialogTitle>
             <DialogContent>
-                <Box sx={{ paddingTop: '20px', width: 500, display: 'flex', justifyContent: 'space-between' }}>
+                <Box sx={{
+                    padding: '20px',
+                    width: 500,
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                }}>
                     <ReactQuill
                         theme='snow'
                         value={text}

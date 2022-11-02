@@ -130,8 +130,6 @@ const TeacherWeekLesson = () => {
         }
     }
 
-
-
     useEffect(() => {
         if (classObject._id === "") {
             getClass();
