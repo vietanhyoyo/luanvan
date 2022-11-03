@@ -57,10 +57,11 @@ const News = (props) => {
     }, [props])
 
     const convertHtml = (xmlString) => {
+        if (!divRender.current) return <div></div>
+        if(divRender.current.innerHTML !== "") return <div></div>
         if (!xmlString) return <div></div>
         if (xmlString === "") return <div></div>
 
-        if (!divRender.current) return <div></div>
 
         const firstIndex = xmlString.indexOf("<iframe ");
         if (firstIndex === -1) {

@@ -30,10 +30,10 @@ class ScheduleService extends BaseService {
         return result;
     }
 
-    updateScheduleLesson = async (id, teacherID, subjectID) => {
+    updateScheduleLesson = async (id, teacherID, subjectID, scheduleID) => {
         const result = await this.api.post(
             '/schedule/update-schedule-lesson',
-            { id, teacherID, subjectID }
+            { id, teacherID, subjectID, scheduleID }
         );
         return result;
     }

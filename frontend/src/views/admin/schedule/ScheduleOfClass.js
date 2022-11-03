@@ -72,6 +72,7 @@ const ScheduleOfClass = ({ scheduleID, classID, weekday, nameOfClass }) => {
                     classID={classID}
                     subjectProps={subjectList}
                     onUpdateLesson={getAPI}
+                    scheduleID={scheduleID}
                 />
             </TableRow>
             array.push(row)

@@ -7,7 +7,7 @@ import NewsService from 'services/objects/news.service';
 
 const newsService = new NewsService()
 
-const AddNews = () => {
+const AddNews = (props) => {
 
     const [open, setOpen] = useState(false);
     const [text, setText] = useState('');
@@ -18,11 +18,12 @@ const AddNews = () => {
 
     const handleSubmit = async () => {
         try {
-            // const result = await newsService.addNews(text)
+            const result = await newsService.addNews(text)
             handleClose()
-            const firstIndex = text.indexOf('<img src="');
-            console.log(firstIndex);
-            console.log(text);
+            // const firstIndex = text.indexOf('<img src="');
+            
+            // console.log(text);
+            props.reload();
         } catch (error) {
             console.log(error)
         }

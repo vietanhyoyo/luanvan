@@ -134,11 +134,27 @@ class ScheduleController {
             res.sendStatus(400);
         } else {
             try {
-                const result = await ScheduleLesson.updateOne(
-                    { _id: req.body.id },
-                    { teacher: req.body.teacherID, subject: req.body.subjectID })
+                const scheduleLesson = await ScheduleLesson.findOne({
+                    _id: req.body.id
+                })
+                if (!scheduleLesson) res.send({ status: 'Error' });
+                const errorScheduleLesson = await ScheduleLesson.find({
+                    schedule: scheduleLesson.schedule,
+                    weekday: scheduleLesson.weekday,
+                    lessonNumber: scheduleLesson.lessonNumber,
+                    teacher: req.body.teacherID
+                })
+                console.log(errorScheduleLesson);
+                if (errorScheduleLesson.length !== 0) {
+                    res.send({ status: 'Error', message: 'Lịch bị trùng' })
+                }
+                else {
+                    const result = await ScheduleLesson.updateOne(
+                        { _id: req.body.id },
+                        { teacher: req.body.teacherID, subject: req.body.subjectID })
 
-                res.send(result);
+                    res.send({status: 'Success', result});
+                }
             } catch (error) {
                 res.send(error);
             }

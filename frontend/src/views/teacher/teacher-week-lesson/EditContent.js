@@ -104,7 +104,8 @@ const EditContent = (props) => {
             const idSubjectArray = subjectList.map(row => row._id);
             bool2 = idSubjectArray.includes(props.lesson.subject);
         }
-        return bool1 & bool2;
+        const result = bool1 && bool2;
+        return result;
     }
 
     const getAPISubjectList = async () => {

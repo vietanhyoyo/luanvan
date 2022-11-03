@@ -109,6 +109,7 @@ const EditLesson = (props) => {
             const idSubjectArray = subjectList.map(row => row._id);
             bool2 = idSubjectArray.includes(props.lesson.subject);
         }
+        props.checkDisabled(bool1 & bool2);
         return bool1 & bool2;
     }
 

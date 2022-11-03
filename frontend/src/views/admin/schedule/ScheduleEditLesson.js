@@ -10,7 +10,7 @@ import ScheduleService from "services/objects/schedule.service";
 const teacherService = new TeacherService();
 const scheduleService = new ScheduleService();
 
-const ScheduleEditLesson = ({ subjectString, lessonID, classID, subjectProps, onUpdateLesson }) => {
+const ScheduleEditLesson = ({ subjectString, lessonID, classID, subjectProps, onUpdateLesson, scheduleID }) => {
 
     const [open, setOpen] = useState(false);
     const [edit, setEdit] = useState(false);
@@ -50,9 +50,18 @@ const ScheduleEditLesson = ({ subjectString, lessonID, classID, subjectProps, on
                 } else {
                     teacherID = null
                 }
-                const result = await scheduleService.updateScheduleLesson(lessonID, teacherID, subjectProps[subject]._id);
-                onUpdateLesson();
-                handleClose();
+                const result = await scheduleService.updateScheduleLesson(
+                    lessonID,
+                    teacherID,
+                    subjectProps[subject]._id,
+                    scheduleID
+                );
+                if(result.data.status !== 'Error'){
+                    onUpdateLesson();
+                    handleClose();
+                }else{
+                    alert(result.data.message);
+                }
                 console.log(result)
             } catch (error) {
                 console.log(error);
@@ -62,7 +71,7 @@ const ScheduleEditLesson = ({ subjectString, lessonID, classID, subjectProps, on
 
     return (
         <>
-            <TableCell sx={{minWidth: '120px', paddingRight: 0, paddingLeft: 0}} align="center" onClick={handleOpen}>{
+            <TableCell sx={{ minWidth: '120px', paddingRight: 0, paddingLeft: 0 }} align="center" onClick={handleOpen}>{
                 subjectString
             }</TableCell>
             <Dialog

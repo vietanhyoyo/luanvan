@@ -36,6 +36,7 @@ const lessonService = new LessonService();
 
 const Content = (props) => {
 
+    const [disabledEdit, setDisabledEdit] = useState(false);
     const navigate = useNavigate();
     const theme = useTheme();
     const [lessonContent, setLessonContent] = useState({
@@ -163,6 +164,10 @@ const Content = (props) => {
         }
     }
 
+    const checkDisabled = (bool) => {
+        setDisabledEdit(bool)
+    }
+
     return (
         <>
             <Box marginBottom={"16px"}>
@@ -178,6 +183,7 @@ const Content = (props) => {
                             week={props.week}
                             lesson={props.lesson}
                             reLoadAPI={props.getLessonList}
+                            checkDisabled={checkDisabled}
                         />
                         <DeleteLesson
                             grade={props.grade}
@@ -221,12 +227,15 @@ const Content = (props) => {
                             </video>
                     }
                     <EditContent lesson={props.lesson} reLoad={getAPI} grade={props.grade} />
-                    <Button
+                    {
+                        disabledEdit ? 
+                        <Button
                         startIcon={<IconTools />}
                         onClick={() => {
                             navigate(`/teacher/add-content-test/${props.lesson ? props.lesson._id : '0'}`)
                         }}
-                    >Thêm bài tập trắc nghiệm</Button>
+                        >Thêm bài tập trắc nghiệm</Button> : <div></div>
+                    }
                 </Box>
             </Box>
             <Stack spacing={2} sx={{ width: '100%' }}>
