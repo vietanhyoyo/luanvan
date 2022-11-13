@@ -1,7 +1,7 @@
 
 import React from 'react'
 import { useTheme } from "@mui/material/styles"
-import { Box, Typography, Button, IconButton, Stack, Snackbar } from "@mui/material";
+import { Box, Typography, Button, IconButton, Stack, Snackbar, Avatar, Input } from "@mui/material";
 import Text from "ui-component/Text";
 import EditContent from "./EditContent";
 import moment from "moment";
@@ -12,12 +12,19 @@ import { IconSquareX, IconTools } from '@tabler/icons';
 import MuiAlert from '@mui/material/Alert';
 import DeleteLesson from './DeleteLesson';
 import ReactPlayer from 'react-player'
+import AdminService from 'services/objects/admin.service';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import SendIcon from '@mui/icons-material/Send';
+import NewsService from 'services/objects/news.service';
+import Comment from '../teacher-news/Comment';
 
 const Alert = React.forwardRef(function Alert(props, ref) {
     return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
 });
+
+const baseUrl = process.env.REACT_APP_BASE_URL
+const borderColor = '#F4F6F8'
 
 function formatInputDate(dateString) {
     let date = new Date(Date.now());
@@ -32,6 +39,8 @@ const contentStyle = {
     paddingLeft: "0px"
 }
 
+const newsService = new NewsService();
+const adminService = new AdminService();
 const lessonService = new LessonService();
 
 const Content = (props) => {
@@ -43,11 +52,27 @@ const Content = (props) => {
         _id: '',
         text: ''
     });
-
+    const [user, setUser] = useState({
+        _id: ''
+    })
+    const [commentList, setCommentList] = useState([]);
     const [alertMessage, setAlertMessage] = useState('Thêm thành công!');
     const [status, setStatus] = useState('success');
     const [open, setOpen] = useState(false);
-    const [video, setVideo] = useState(null)
+    const [video, setVideo] = useState(null);
+    const [comment, setComment] = useState({
+        text: '',
+        news: null
+    })
+
+    const getUser = async () => {
+        try {
+            const result = await adminService.getUserInfo()
+            setUser(result.data)
+        } catch (error) {
+            console.log(error)
+        }
+    }
 
     const handleAlert = () => {
         setOpen(true);
@@ -59,6 +84,29 @@ const Content = (props) => {
         }
         setOpen(false);
     };
+
+    const getComments = async () => {
+        try {
+            const result = await newsService.getCommentsByLesson(props.lesson._id)
+            setCommentList(result.data);
+            // console.log(result.data)
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
+    const addComment = async (e) => {
+        e.preventDefault();
+        try {
+            const result = await newsService.addCommentQA(comment.text, props.lesson._id);
+            setComment(prev => ({
+                ...prev, text: ''
+            }));
+            getComments();
+        } catch (error) {
+            console.log(error)
+        }
+    }
 
     const divRender = useRef();
 
@@ -81,6 +129,8 @@ const Content = (props) => {
 
     useEffect(() => {
         getAPI()
+        getUser();
+        getComments();
         return () => {
             setLessonContent({
                 _id: '',
@@ -228,14 +278,61 @@ const Content = (props) => {
                     }
                     <EditContent lesson={props.lesson} reLoad={getAPI} grade={props.grade} />
                     {
-                        disabledEdit ? 
-                        <Button
-                        startIcon={<IconTools />}
-                        onClick={() => {
-                            navigate(`/teacher/add-content-test/${props.lesson ? props.lesson._id : '0'}`)
-                        }}
-                        >Thêm bài tập trắc nghiệm</Button> : <div></div>
+                        disabledEdit ?
+                            <Button
+                                startIcon={<IconTools />}
+                                onClick={() => {
+                                    navigate(`/teacher/add-content-test/${props.lesson ? props.lesson._id : '0'}`)
+                                }}
+                            >Thêm bài tập trắc nghiệm</Button> : <div></div>
                     }
+                    <Box mt={4}>
+                        <Typography>Phần thảo luận</Typography>
+                        <form onSubmit={addComment}>
+                            <Box display="flex" marginTop={1}>
+                                {user.avatar ? <Avatar
+                                    alt="profile"
+                                    src={baseUrl + "/image/" + user.avatar}
+                                    sx={{ width: 28, height: 28 }}
+                                /> : <Avatar
+                                    alt="profile"
+                                    label='T'
+                                    sx={{ width: 28, height: 28 }}
+                                />}
+                                <Input sx={{
+                                    position: 'relative',
+                                    marginLeft: '10px',
+                                    padding: '10px',
+                                    borderRadius: '10px',
+                                    border: `1px solid ${borderColor}`,
+                                    flex: 1
+                                }}
+                                    name="commentInput"
+                                    value={comment.text}
+                                    onChange={(e) => {
+                                        setComment(prev => ({ ...prev, text: e.target.value }))
+                                    }}
+                                    variant="outlined"
+                                    fullWidth
+                                />
+                                <IconButton color="primary" type="submit">
+                                    <SendIcon />
+                                </IconButton>
+                            </Box>
+                        </form>
+                    </Box>
+                    <Box mt={4}>
+                        {commentList.length !== 0 ?
+                            commentList.map((row, index) => {
+                                return <Comment
+                                    key={index}
+                                    comment={row}
+                                    userID={user._id}
+                                    userInfor={user}
+                                />
+                            })
+                            : <div></div>}
+                    </Box>
                 </Box>
             </Box>
             <Stack spacing={2} sx={{ width: '100%' }}>

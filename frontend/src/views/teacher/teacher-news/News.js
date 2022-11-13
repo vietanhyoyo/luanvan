@@ -5,7 +5,7 @@ import {
 } from "@mui/material"
 import { IconHeart } from '@tabler/icons';
 import SendIcon from '@mui/icons-material/Send';
-import { useState, useRef, useEffect } from 'react'
+import { useState, useRef, useEffect, memo } from 'react'
 import moment from "moment";
 import AdminService from "services/objects/admin.service";
 import NewsService from "services/objects/news.service";
@@ -38,12 +38,14 @@ const News = (props) => {
         text: '',
         news: null
     })
-    const [commentList, setCommentList] = useState([])
+    const [commentList, setCommentList] = useState([]);
+    const [loading, setLoading] = useState(true)
 
     const getComment = async () => {
         try {
             const result = await newsService.getComment(props.newsData._id)
-            setCommentList(result.data)
+            setCommentList(result.data);
+            setLoading(false)
         } catch (error) {
             console.log(error)
         }
@@ -74,7 +76,6 @@ const News = (props) => {
     }
 
     const addComment = async (e) => {
-        console.log('Go')
         e.preventDefault();
         try {
             const result = await newsService.addComment(comment.text, comment.news);
@@ -188,4 +189,4 @@ const News = (props) => {
     </>
 }
 
-export default News
+export default memo(News)

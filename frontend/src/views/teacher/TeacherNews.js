@@ -30,8 +30,9 @@ const TeacherNews = () => {
 
     const getAll = async () => {
         try {
+            setLoading(true);
             const result = await newsService.getAll()
-            setLoading(false)
+            setLoading(false);
             setNewsList(result.data)
         } catch (error) {
             console.log(error)

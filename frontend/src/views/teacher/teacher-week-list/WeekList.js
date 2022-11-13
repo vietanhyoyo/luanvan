@@ -4,13 +4,9 @@ import MainCard from 'ui-component/cards/MainCard';
 import { useState, useEffect, memo } from 'react'
 // material-ui
 import {
-    Button, Box, Dialog, DialogTitle, DialogContent, DialogActions,
-    TextField, CircularProgress, FormControl, Select, InputLabel, MenuItem
+    Button, Box, CircularProgress, FormControl, Select, MenuItem
 } from '@mui/material'
 import moment from 'moment';
-import {
-    IconPlus
-} from '@tabler/icons';
 import LessonService from 'services/objects/lesson.service';
 
 function formatInputDate(dateString) {

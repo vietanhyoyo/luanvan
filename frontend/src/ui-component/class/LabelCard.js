@@ -174,7 +174,7 @@ const LabelCard = ({ isLoading, classroomName, classID }) => {
             ) : (
                 <CardWrapper border={false} content={false}>
                     <Box sx={{ p: 2 }}>
-                        <List sx={{ py: 0, display: "flex", justifyContent: "space-between" }}>
+                        <List sx={{ py: 0 }}>
                             <Typography variant="h2" sx={{ color: '#fff' }}>
                                 Lớp {classroomName || " "}
                             </Typography>

@@ -56,6 +56,19 @@ class NewsController {
         }
     }
 
+    getCommentsByLesson(req, res) {
+        if (!req.body) res.sendStatus(400)
+        else {
+            const { lesson } = req.body
+            Comment.find({ lesson }).populate({ path: 'createUser', model: 'Account' }).exec((err, docs) => {
+                if (err) res.send(err)
+                else {
+                    res.send(docs)
+                }
+            })
+        }
+    }
+
     addComment(req, res) {
         if (!req.body) res.sendStatus(400);
         else {
@@ -72,6 +85,31 @@ class NewsController {
                     else {
                         const { text, news } = req.body;
                         Comment.create({ text, news, createUser: data._id }, (error, doc) => {
+                            if (error) res.send(error);
+                            else res.send(doc);
+                        })
+                    };
+                });
+            }
+        }
+    }
+
+    addCommentQA(req, res) {
+        if (!req.body) res.sendStatus(400);
+        else {
+            const authorization = req.headers['authorization'];
+            if (!authorization) res.sendStatus(401);
+            //'Beaer [token]'
+            const token = authorization.split(' ')[1];
+
+            if (!token) res.sendStatus(401);
+            else {
+                jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, data) => {
+                    // console.log(err, data)
+                    if (err) res.sendStatus(403);
+                    else {
+                        const { text, lesson } = req.body;
+                        Comment.create({ text, lesson, createUser: data._id }, (error, doc) => {
                             if (error) res.send(error);
                             else res.send(doc);
                         })

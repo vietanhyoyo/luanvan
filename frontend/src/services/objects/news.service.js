@@ -17,6 +17,11 @@ class NewsService extends BaseService {
         return result;
     }
 
+    addCommentQA = async (text, lesson) => {
+        const result = await this.api.post('/news/add-comment-qa', { text, lesson });
+        return result;
+    }
+
     getComment = async (news) => {
         const result = await this.api.post('/news/get-comment-by-news', { news });
         return result;
@@ -44,6 +49,11 @@ class NewsService extends BaseService {
 
     likeReComment = async (reCommentID) => {
         const result = await this.api.post('/news/like-recomment', { reCommentID });
+        return result;
+    }
+
+    getCommentsByLesson = async (lesson) => {
+        const result = await this.api.post('/news/get-comments-by-lesson', { lesson });
         return result;
     }
 
