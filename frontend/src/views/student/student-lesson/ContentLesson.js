@@ -1,7 +1,7 @@
 
 import React from 'react'
 import { useTheme } from "@mui/material/styles"
-import { Box, Typography, Button } from "@mui/material";
+import { Box, Typography, Button, Avatar, Input, IconButton } from "@mui/material";
 import Text from "ui-component/Text";
 import moment from "moment";
 import { useState, useEffect, useRef } from 'react'
@@ -9,6 +9,10 @@ import LessonService from "services/objects/lesson.service";
 import MuiAlert from '@mui/material/Alert';
 import QuestionService from 'services/objects/question.service';
 import { useNavigate } from 'react-router-dom'
+import AdminService from 'services/objects/admin.service';
+import Comment from 'views/teacher/teacher-news/Comment';
+import SendIcon from '@mui/icons-material/Send';
+import NewsService from 'services/objects/news.service';
 
 function formatInputDate(dateString) {
     let date = new Date(Date.now());
@@ -23,8 +27,14 @@ const contentStyle = {
     paddingLeft: "0px"
 }
 
+const baseUrl = process.env.REACT_APP_BASE_URL
+
+const newsService = new NewsService();
+const adminService = new AdminService();
 const questionService = new QuestionService();
 const lessonService = new LessonService();
+
+const borderColor = '#F4F6F8'
 
 const ContentLesson = (props) => {
 
@@ -33,9 +43,26 @@ const ContentLesson = (props) => {
         _id: '',
         text: ''
     });
+    const [user, setUser] = useState({
+        _id: ''
+    })
+    const [commentList, setCommentList] = useState([]);
     const [isQuestionTest, setIsQuestionTest] = useState(false);
     const divRender = useRef();
     const navigate = useNavigate()
+    const [comment, setComment] = useState({
+        text: '',
+        news: null
+    })
+
+    const getUser = async () => {
+        try {
+            const result = await adminService.getUserInfo()
+            setUser(result.data)
+        } catch (error) {
+            console.log(error)
+        }
+    }
 
     const getAPI = async () => {
         try {
@@ -49,6 +76,29 @@ const ContentLesson = (props) => {
                     text: '- - - - - - Chưa có nội dung - - - - - -'
                 })
             }
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
+    const getComments = async () => {
+        try {
+            const result = await newsService.getCommentsByLesson(props.lesson._id)
+            setCommentList(result.data);
+            // console.log(result.data)
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
+    const addComment = async (e) => {
+        e.preventDefault();
+        try {
+            const result = await newsService.addCommentQA(comment.text, props.lesson._id);
+            setComment(prev => ({
+                ...prev, text: ''
+            }));
+            getComments();
         } catch (error) {
             console.log(error)
         }
@@ -71,6 +121,8 @@ const ContentLesson = (props) => {
     useEffect(() => {
         getAPI();
         getQuestionTest();
+        getUser();
+        getComments();
         return () => {
             setLessonContent({
                 _id: '',
@@ -154,6 +206,53 @@ const ContentLesson = (props) => {
                     <Button onClick={() => navigate(`/student/question-test/${props.lesson._id}`)}>Làm bài tập trắc nghiệm</Button>
                     : <div></div>
                 }
+                <Box mt={4}>
+                        <Typography>Phần thảo luận</Typography>
+                        <form onSubmit={addComment}>
+                            <Box display="flex" marginTop={1}>
+                                {user.avatar ? <Avatar
+                                    alt="profile"
+                                    src={baseUrl + "/image/" + user.avatar}
+                                    sx={{ width: 28, height: 28 }}
+                                /> : <Avatar
+                                    alt="profile"
+                                    label='T'
+                                    sx={{ width: 28, height: 28 }}
+                                />}
+                                <Input sx={{
+                                    position: 'relative',
+                                    marginLeft: '10px',
+                                    padding: '10px',
+                                    borderRadius: '10px',
+                                    border: `1px solid ${borderColor}`,
+                                    flex: 1
+                                }}
+                                    name="commentInput"
+                                    value={comment.text}
+                                    onChange={(e) => {
+                                        setComment(prev => ({ ...prev, text: e.target.value }))
+                                    }}
+                                    variant="outlined"
+                                    fullWidth
+                                />
+                                <IconButton color="primary" type="submit">
+                                    <SendIcon />
+                                </IconButton>
+                            </Box>
+                        </form>
+                    </Box>
+                    <Box mt={4}>
+                        {commentList.length !== 0 ?
+                            commentList.map((row, index) => {
+                                return <Comment
+                                    key={index}
+                                    comment={row}
+                                    userID={user._id}
+                                    userInfor={user}
+                                />
+                            })
+                            : <div></div>}
+                    </Box>
             </Box>
         </>)
 }
