@@ -1,7 +1,7 @@
 // material-ui
 import {
     Grid, Box, Typography, FormControl,
-    MenuItem, Select
+    MenuItem, Select, Button
 } from '@mui/material';
 
 // project imports
@@ -15,6 +15,7 @@ import ClassService from 'services/objects/class.service';
 import LessonService from 'services/objects/lesson.service';
 import ClassContentService from 'services/objects/classContent.service';
 import LeftCard from './teacher-card/LeftCard';
+import { useNavigate } from 'react-router-dom';
 
 const classService = new ClassService();
 const lessonService = new LessonService();
@@ -30,6 +31,7 @@ const TeacherClass = () => {
     });
     const [lessonList, setLessonList] = useState([]);
     const [classContents, setClassContents] = useState([])
+    const navigate = useNavigate();
 
     const getClass = async () => {
         try {
@@ -57,6 +59,10 @@ const TeacherClass = () => {
             getClassContentList();
         }
     }, [classObject])
+
+    const handleShowClassList = () => {
+        navigate(`/teacher/class-room/${classObject._id}`);
+    }
 
     return (
         <>
@@ -102,6 +108,11 @@ const TeacherClass = () => {
                             <Grid container spacing={gridSpacing}>
                                 <Grid item sm={12} xs={12} md={12} lg={12}>
                                     <LeftCard />
+                                </Grid>
+                                <Grid item sm={12} xs={12} md={12} lg={12}>
+                                    <MainCard>
+                                        <Button onClick={handleShowClassList}>Xem danh sách lớp</Button>
+                                    </MainCard>
                                 </Grid>
                             </Grid>
                         </Grid>
