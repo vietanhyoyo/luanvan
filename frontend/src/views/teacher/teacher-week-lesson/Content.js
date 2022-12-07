@@ -140,7 +140,8 @@ const Content = (props) => {
     }, [props.lesson])
 
     useEffect(() => {
-        if (lessonContent.video)
+        setVideo(null);
+        if (lessonContent.video !== '' && lessonContent.video !== undefined)
             downloadVideo();
     }, [lessonContent])
 

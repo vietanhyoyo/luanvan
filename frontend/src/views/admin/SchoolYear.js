@@ -127,9 +127,6 @@ const SchoolYear = () => {
                                     <TableCell width={"30px"}>{index + 1}</TableCell>
                                     <TableCell align="left">{row.name}</TableCell>
                                     <TableCell align="right">
-                                        <IconButton color="primary" component="span">
-                                            <EditIcon />
-                                        </IconButton>
                                         <IconButton color="error" component="span" onClick={() => handleDeleteButton(row._id)}>
                                             <DeleteIcon />
                                         </IconButton>

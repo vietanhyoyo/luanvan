@@ -128,7 +128,7 @@ const AddLesson = (props) => {
             // onClose={() => setOpenAddLesson(false)}
         >
             <DialogTitle>
-                {"Thêm mới một lớp học"}
+                {"Thêm mới một tiết học"}
             </DialogTitle>
             <DialogContent sx={{}}>
                 <Box sx={{ paddingTop: '20px', width: 400 }}>
