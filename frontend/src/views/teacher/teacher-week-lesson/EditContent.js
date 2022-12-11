@@ -74,7 +74,12 @@ const EditContent = (props) => {
                 setText(data.text);
                 if (data.video !== "" && data.video) {
                     setFile([{ name: data.video }])
+                }else{
+                    setFile([])
                 }
+            }else{
+                setText("");
+                setFile([])
             }
         } catch (error) {
             console.log(error)

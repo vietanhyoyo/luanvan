@@ -243,6 +243,7 @@ class ScheduleController {
 
                 const data = req.body;
                 const d = new Date()
+                // const d = new Date(2022, 11, 7, 8, 10)
                 const weekdays = ['Chủ nhật', 'Thứ hai', 'Thứ ba', 'Thứ tư', 'Thứ năm', 'Thứ sáu', 'Thứ bảy']
 
                 const dataFind = {

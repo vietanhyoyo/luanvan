@@ -106,7 +106,7 @@ const LabelCard = ({ isLoading, classroomName, classID }) => {
 
     const openSocket = () => {
         const nDate = new Date()
-        // const nDate = new Date()
+        // const nDate = new Date(2022, 11, 7, 8, 10)
         /**Gửi lên socket */
         socket.current.emit('online-meeting', {
             hour: nDate.getHours(),
@@ -115,7 +115,10 @@ const LabelCard = ({ isLoading, classroomName, classID }) => {
         /**Lắng nghe socket */
         socket.current.on('online-meeting-client', data => {
             if (data.lessonNumber !== 0) {
-                if (classID) getSubject(String(data.lessonNumber));
+                if (classID) {
+                    getSubject(String(data.lessonNumber));
+                    console.log('Lấy môn học: ', data.lessonNumber)
+                }
             }
             else {
                 setSubject(null);
