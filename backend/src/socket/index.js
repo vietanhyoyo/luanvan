@@ -11,8 +11,8 @@ function socket(io) {
 
     setInterval(() => {
         let number = 0;
-        const nDate = new Date()
-        // const nDate = new Date(2022, 11, 7, 8, 10)
+        // const nDate = new Date()
+        const nDate = new Date(2022, 11, 7, 8, 10)
         const nowDate = new Date(
             nDate.getFullYear(),
             nDate.getMonth(),

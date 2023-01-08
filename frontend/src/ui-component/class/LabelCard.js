@@ -105,8 +105,8 @@ const LabelCard = ({ isLoading, classroomName, classID }) => {
     const socket = useRef();
 
     const openSocket = () => {
-        const nDate = new Date()
-        // const nDate = new Date(2022, 11, 7, 8, 10)
+        // const nDate = new Date()
+        const nDate = new Date(2022, 11, 7, 8, 10)
         /**Gửi lên socket */
         socket.current.emit('online-meeting', {
             hour: nDate.getHours(),
